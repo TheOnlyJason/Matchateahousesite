@@ -1,0 +1,20 @@
+/* Premium Typography for CONSTANCE Matcha Teahouse */
+
+/* Import elegant Google Fonts for the stone-themed aesthetic */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant:wght@300;400;500&family=Inter:wght@300;400;500&display=swap');
+
+/* Cormorant for headings - elegant serif that evokes luxury tea houses */
+/* Inter for body text - clean, modern sans-serif */
+
+:root {
+  --font-heading: 'Cormorant', serif;
+  --font-body: 'Inter', sans-serif;
+}
+
+body {
+  font-family: var(--font-body);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+}

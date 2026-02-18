@@ -1,0 +1,69 @@
+{
+  "brand": {
+    "name": "CONSTANCE",
+    "tagline": "Story First",
+    "location": "San Francisco"
+  },
+  "chapters": [
+    {
+      "id": "chapter-1",
+      "title": "The Portal",
+      "subtitle": "CONSTANCE",
+      "description": "Where the journey begins",
+      "videoUrl": "https://assets.codepen.io/127738/overview_of_tea_field.mp4",
+      "duration": 300
+    },
+    {
+      "id": "chapter-2",
+      "title": "The Reveal",
+      "subtitle": "The Source",
+      "headline": "Straight from Uji, Japan",
+      "description": "Just the pure expression of the soil.",
+      "videoUrl": "https://assets.codepen.io/127738/overview_of_tea_field.mp4"
+    },
+    {
+      "id": "chapter-3",
+      "title": "Transformation",
+      "subtitle": "The Mill",
+      "headline": "Stone-ground perfection",
+      "description": "Every particle tells a story"
+    },
+    {
+      "id": "chapter-4",
+      "title": "Precision",
+      "subtitle": "The Machine",
+      "headline": "Engineered Excellence",
+      "description": "Where craft meets technology",
+      "sideNote": {
+        "title": "High-mountain Oolong",
+        "description": "From the peaks of Taiwan"
+      }
+    },
+    {
+      "id": "chapter-5",
+      "title": "Connection",
+      "subtitle": "The Architects",
+      "headline": "Behind Every Cup",
+      "description": "Meet the artisans who craft your experience",
+      "cta": {
+        "text": "Join Our Team",
+        "link": "#careers"
+      }
+    },
+    {
+      "id": "chapter-6",
+      "title": "The Sanctuary",
+      "subtitle": "The Studio",
+      "headline": "Visit Us",
+      "description": "Experience matcha elevated"
+    }
+  ],
+  "contact": {
+    "address": "3512 Balboa St",
+    "city": "San Francisco",
+    "state": "CA",
+    "zip": "94121",
+    "email": "hello@constance.sf",
+    "phone": "(415) 555-0100"
+  }
+}
