@@ -1,11 +1,21 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
 
 export function CustomCursor() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
+  const [isPointerFine, setIsPointerFine] = useState(false);
 
   useEffect(() => {
+    const mq = window.matchMedia('(pointer: fine)');
+    setIsPointerFine(mq.matches);
+    const handler = () => setIsPointerFine(mq.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
+
+  useEffect(() => {
+    if (!isPointerFine) return;
     const handleMouseMove = (e: MouseEvent) => {
       setMousePosition({ x: e.clientX, y: e.clientY });
     };
@@ -34,21 +44,13 @@ export function CustomCursor() {
       document.removeEventListener('mouseover', handleMouseOver);
       document.removeEventListener('mouseout', handleMouseOut);
     };
-  }, []);
+  }, [isPointerFine]);
 
-  // Hide cursor on mobile
-  if (typeof window !== 'undefined' && window.innerWidth < 768) {
-    return null;
-  }
+  if (!isPointerFine) return null;
 
   return (
     <>
-      {/* Hide default cursor */}
-      <style>{`
-        * {
-          cursor: none !important;
-        }
-      `}</style>
+      <style>{`* { cursor: none !important; }`}</style>
 
       {/* Custom cursor dot */}
       <motion.div

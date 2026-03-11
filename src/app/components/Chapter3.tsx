@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -154,16 +154,16 @@ export function Chapter3({ data }: Chapter3Props) {
       {/* Text Content */}
       <div
         ref={textRef}
-        className="absolute inset-0 flex flex-col items-center justify-center px-8 text-center"
+        className="absolute inset-0 flex flex-col items-center justify-center px-4 sm:px-6 md:px-8 text-center"
         style={{ 
           transform: 'translateZ(0)',
           willChange: 'transform'
         }}
       >
-        <h2 className="mb-4 tracking-wide uppercase" style={{ fontSize: '4rem', fontWeight: 300, color: 'var(--stone-dark)' }}>
+        <h2 className="mb-4 tracking-wide uppercase" style={{ fontSize: 'clamp(1.75rem, 6vw, 4rem)', fontWeight: 300, color: 'var(--stone-dark)' }}>
           {data.headline}
         </h2>
-        <p className="max-w-2xl" style={{ fontSize: '1.5rem', fontWeight: 300, color: 'var(--stone-dark)', opacity: 0.8 }}>
+        <p className="max-w-2xl" style={{ fontSize: 'clamp(1rem, 2.5vw, 1.5rem)', fontWeight: 300, color: 'var(--stone-dark)', opacity: 0.8 }}>
           {data.description}
         </p>
       </div>

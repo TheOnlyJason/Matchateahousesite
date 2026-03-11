@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -93,16 +93,16 @@ export function Chapter2({ data }: Chapter2Props) {
       {/* Parallax Text */}
       <div
         ref={textRef}
-        className="absolute inset-0 flex flex-col items-center justify-center px-8 text-center"
+        className="absolute inset-0 flex flex-col items-center justify-center px-4 sm:px-6 md:px-8 text-center"
         style={{ 
           transform: 'translateZ(0)',
           willChange: 'transform'
         }}
       >
-        <h2 className="text-white mb-6 tracking-wide uppercase" style={{ fontSize: '4rem', fontWeight: 300 }}>
+        <h2 className="text-white mb-4 sm:mb-6 tracking-wide uppercase" style={{ fontSize: 'clamp(1.75rem, 6vw, 4rem)', fontWeight: 300 }}>
           {data.headline}
         </h2>
-        <p className="text-white/90 max-w-2xl" style={{ fontSize: '1.5rem', fontWeight: 300, letterSpacing: '0.05em' }}>
+        <p className="text-white/90 max-w-2xl" style={{ fontSize: 'clamp(1rem, 2.5vw, 1.5rem)', fontWeight: 300, letterSpacing: '0.05em' }}>
           {data.description}
         </p>
       </div>

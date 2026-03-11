@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -69,7 +69,7 @@ export function Chapter4({ data }: Chapter4Props) {
 
     // Slide in glassmorphic card
     tl.from(card, {
-      x: 300,
+      x: typeof window !== 'undefined' && window.innerWidth >= 768 ? 300 : 80,
       opacity: 0,
       duration: 0.3,
     }, 0.4);
@@ -135,16 +135,16 @@ export function Chapter4({ data }: Chapter4Props) {
       {/* Text Content */}
       <div
         ref={textRef}
-        className="absolute top-24 left-24 max-w-xl"
+        className="absolute top-12 left-4 right-4 sm:top-16 sm:left-8 md:top-24 md:left-24 max-w-xl"
         style={{ 
           transform: 'translateZ(0)',
           willChange: 'transform'
         }}
       >
-        <h2 className="mb-4 tracking-wide uppercase" style={{ fontSize: '3.5rem', fontWeight: 300, color: 'var(--stone-dark)' }}>
+        <h2 className="mb-4 tracking-wide uppercase" style={{ fontSize: 'clamp(1.5rem, 5vw, 3.5rem)', fontWeight: 300, color: 'var(--stone-dark)' }}>
           {data.headline}
         </h2>
-        <p className="max-w-md" style={{ fontSize: '1.25rem', fontWeight: 300, color: 'var(--stone-dark)', opacity: 0.8 }}>
+        <p className="max-w-md" style={{ fontSize: 'clamp(0.9375rem, 2vw, 1.25rem)', fontWeight: 300, color: 'var(--stone-dark)', opacity: 0.8 }}>
           {data.description}
         </p>
       </div>
@@ -153,7 +153,7 @@ export function Chapter4({ data }: Chapter4Props) {
       {data.sideNote && (
         <div
           ref={cardRef}
-          className="absolute bottom-24 right-24 p-8 rounded-2xl backdrop-blur-xl"
+          className="absolute bottom-8 right-4 left-4 sm:bottom-16 sm:right-8 sm:left-auto md:bottom-24 md:right-24 p-6 sm:p-8 rounded-2xl backdrop-blur-xl"
           style={{
             backgroundColor: 'rgba(255, 255, 255, 0.7)',
             border: '1px solid rgba(255, 255, 255, 0.3)',

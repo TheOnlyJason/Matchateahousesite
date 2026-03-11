@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ImageWithFallback } from './figma/ImageWithFallback';
@@ -82,16 +82,16 @@ export function Chapter6({ data, contact }: Chapter6Props) {
       {/* Content */}
       <div
         ref={contentRef}
-        className="absolute inset-0 flex flex-col items-center justify-center text-center px-8"
+        className="absolute inset-0 flex flex-col items-center justify-center text-center px-4 sm:px-6 md:px-8"
         style={{ 
           transform: 'translateZ(0)',
           willChange: 'transform'
         }}
       >
-        <h2 className="text-white mb-6 tracking-wide uppercase" style={{ fontSize: '4rem', fontWeight: 300 }}>
+        <h2 className="text-white mb-4 sm:mb-6 tracking-wide uppercase" style={{ fontSize: 'clamp(1.75rem, 6vw, 4rem)', fontWeight: 300 }}>
           {data.headline}
         </h2>
-        <p className="text-white/90 max-w-2xl mb-12" style={{ fontSize: '1.5rem', fontWeight: 300, letterSpacing: '0.05em' }}>
+        <p className="text-white/90 max-w-2xl mb-8 sm:mb-12" style={{ fontSize: 'clamp(1rem, 2.5vw, 1.5rem)', fontWeight: 300, letterSpacing: '0.05em' }}>
           {data.description}
         </p>
       </div>
@@ -99,13 +99,13 @@ export function Chapter6({ data, contact }: Chapter6Props) {
       {/* Footer */}
       <div
         ref={footerRef}
-        className="absolute bottom-0 left-0 right-0 bg-black/80 backdrop-blur-sm text-white py-12"
+        className="absolute bottom-0 left-0 right-0 bg-black/80 backdrop-blur-sm text-white py-8 sm:py-12 px-4 sm:px-6 md:px-8"
         style={{ 
           transform: 'translateZ(0)',
           willChange: 'transform'
         }}
       >
-        <div className="max-w-7xl mx-auto px-8 grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
           {/* Address */}
           <div>
             <h3 className="uppercase tracking-wider mb-4" style={{ fontSize: '0.875rem', fontWeight: 500, opacity: 0.6 }}>
@@ -123,11 +123,11 @@ export function Chapter6({ data, contact }: Chapter6Props) {
               Contact
             </h3>
             <p style={{ fontSize: '1rem', fontWeight: 300, lineHeight: 1.6 }}>
-              <a href={`mailto:${contact.email}`} className="hover:text-[var(--matcha-green)] transition-colors">
+              <a href={`mailto:${contact.email}`} className="inline-block py-2 -my-2 hover:text-[var(--matcha-green)] transition-colors min-h-[44px] min-w-[44px] flex items-center">
                 {contact.email}
               </a>
               <br />
-              <a href={`tel:${contact.phone}`} className="hover:text-[var(--matcha-green)] transition-colors">
+              <a href={`tel:${contact.phone}`} className="inline-block py-2 -my-2 hover:text-[var(--matcha-green)] transition-colors min-h-[44px] min-w-[44px] flex items-center">
                 {contact.phone}
               </a>
             </p>
@@ -146,7 +146,7 @@ export function Chapter6({ data, contact }: Chapter6Props) {
         </div>
 
         {/* Copyright */}
-        <div className="max-w-7xl mx-auto px-8 mt-8 pt-8 border-t border-white/20 text-center">
+        <div className="max-w-7xl mx-auto mt-6 sm:mt-8 pt-6 sm:pt-8 border-t border-white/20 text-center">
           <p style={{ fontSize: '0.875rem', fontWeight: 300, opacity: 0.5 }}>
             © 2026 CONSTANCE. All rights reserved.
           </p>

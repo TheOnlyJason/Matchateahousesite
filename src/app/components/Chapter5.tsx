@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ImageWithFallback } from './figma/ImageWithFallback';
@@ -92,11 +92,11 @@ export function Chapter5({ data }: Chapter5Props) {
       className="relative h-screen w-full overflow-hidden bg-black"
     >
       {/* Editorial Collage */}
-      <div className="absolute inset-0 flex items-center justify-center">
+      <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
         {/* Image 1 - Team collaboration */}
         <div
           ref={image1Ref}
-          className="absolute w-[400px] h-[500px] left-[10%] top-[15%] shadow-2xl"
+          className="absolute w-[55vw] max-w-[280px] sm:max-w-[340px] md:w-[400px] h-[65vw] max-h-[360px] sm:max-h-[420px] md:h-[500px] left-[2%] sm:left-[8%] top-[12%] shadow-2xl"
           style={{ 
             transform: 'translateZ(0) rotate(-5deg)',
             willChange: 'transform',
@@ -113,7 +113,7 @@ export function Chapter5({ data }: Chapter5Props) {
         {/* Image 2 - Cupping bowl */}
         <div
           ref={image2Ref}
-          className="absolute w-[350px] h-[450px] right-[15%] top-[25%] shadow-2xl"
+          className="absolute w-[50vw] max-w-[260px] sm:max-w-[300px] md:w-[350px] h-[58vw] max-h-[320px] sm:max-h-[380px] md:h-[450px] right-[2%] sm:right-[10%] top-[22%] shadow-2xl"
           style={{ 
             transform: 'translateZ(0) rotate(3deg)',
             willChange: 'transform',
@@ -127,10 +127,10 @@ export function Chapter5({ data }: Chapter5Props) {
           />
         </div>
 
-        {/* Image 3 - Hands/craftsmanship - using same team image for variety */}
+        {/* Image 3 - Hands/craftsmanship */}
         <div
           ref={image3Ref}
-          className="absolute w-[300px] h-[400px] left-[35%] bottom-[10%] shadow-2xl"
+          className="absolute w-[45vw] max-w-[220px] sm:max-w-[260px] md:w-[300px] h-[55vw] max-h-[280px] sm:max-h-[340px] md:h-[400px] left-[28%] sm:left-[32%] bottom-[8%] shadow-2xl"
           style={{ 
             transform: 'translateZ(0) rotate(-3deg)',
             willChange: 'transform',
@@ -148,16 +148,16 @@ export function Chapter5({ data }: Chapter5Props) {
       {/* Text Content */}
       <div
         ref={textRef}
-        className="absolute top-16 right-16 text-right max-w-lg z-10"
+        className="absolute top-10 right-4 left-4 sm:top-14 sm:right-8 md:top-16 md:right-16 text-right max-w-lg z-10"
         style={{ 
           transform: 'translateZ(0)',
           willChange: 'transform'
         }}
       >
-        <h2 className="text-white mb-4 tracking-wide uppercase" style={{ fontSize: '3.5rem', fontWeight: 300 }}>
+        <h2 className="text-white mb-3 sm:mb-4 tracking-wide uppercase" style={{ fontSize: 'clamp(1.5rem, 5vw, 3.5rem)', fontWeight: 300 }}>
           {data.headline}
         </h2>
-        <p className="text-white/80" style={{ fontSize: '1.25rem', fontWeight: 300 }}>
+        <p className="text-white/80" style={{ fontSize: 'clamp(0.9375rem, 2vw, 1.25rem)', fontWeight: 300 }}>
           {data.description}
         </p>
       </div>
@@ -166,7 +166,8 @@ export function Chapter5({ data }: Chapter5Props) {
       {data.cta && (
         <button
           ref={ctaRef}
-          className="absolute bottom-16 left-1/2 -translate-x-1/2 px-12 py-4 rounded-full border-2 border-white text-white uppercase tracking-wider transition-all hover:bg-white hover:text-black"
+          type="button"
+          className="absolute bottom-8 sm:bottom-16 left-1/2 -translate-x-1/2 px-8 sm:px-12 py-3 sm:py-4 min-h-[48px] rounded-full border-2 border-white text-white uppercase tracking-wider transition-all hover:bg-white hover:text-black focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black"
           style={{
             fontSize: '0.875rem',
             fontWeight: 500,
