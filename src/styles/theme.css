@@ -46,6 +46,11 @@
   --stone-dark: #2a2a2a;
   --matcha-green: #7cb342;
   --matcha-dark: #558b2f;
+  /* Luxury accents — muted charcoal & desaturated moss */
+  --luxury-charcoal: #1c1c1c;
+  --luxury-moss: #4a5a4a;
+  --luxury-moss-hover: #5d6e5d;
+  --luxury-line: rgba(28, 28, 28, 0.12);
 }
 
 .dark {

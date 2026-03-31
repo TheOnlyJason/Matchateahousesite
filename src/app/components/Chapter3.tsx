@@ -6,6 +6,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 interface Chapter3Props {
   data: {
+    kicker?: string;
     headline: string;
     description: string;
   };
@@ -99,7 +100,7 @@ export function Chapter3({ data }: Chapter3Props) {
         start: 'top top',
         end: '+=200%',
         pin: true,
-        scrub: 1,
+        scrub: 1.15,
         anticipatePin: 1,
         onUpdate: (self) => {
           scrollVelocityRef.current = self.getVelocity() / 1000;
@@ -125,6 +126,8 @@ export function Chapter3({ data }: Chapter3Props) {
       ScrollTrigger.getAll().forEach(trigger => trigger.kill());
     };
   }, []);
+
+  const { kicker } = data;
 
   return (
     <div
@@ -160,10 +163,18 @@ export function Chapter3({ data }: Chapter3Props) {
           willChange: 'transform'
         }}
       >
-        <h2 className="mb-4 tracking-wide uppercase" style={{ fontSize: 'clamp(1.75rem, 6vw, 4rem)', fontWeight: 300, color: 'var(--stone-dark)' }}>
+        {kicker ? (
+          <p className="luxury-kicker mb-6 sm:mb-8" style={{ color: 'var(--luxury-moss)' }}>
+            {kicker}
+          </p>
+        ) : null}
+        <h2
+          className="luxury-display mb-4"
+          style={{ fontSize: 'clamp(2rem, 6.5vw, 4.25rem)', color: 'var(--luxury-charcoal)' }}
+        >
           {data.headline}
         </h2>
-        <p className="max-w-2xl" style={{ fontSize: 'clamp(1rem, 2.5vw, 1.5rem)', fontWeight: 300, color: 'var(--stone-dark)', opacity: 0.8 }}>
+        <p className="luxury-body max-w-2xl" style={{ fontSize: 'clamp(1rem, 2.5vw, 1.5rem)', color: 'var(--luxury-charcoal)', opacity: 0.82 }}>
           {data.description}
         </p>
       </div>

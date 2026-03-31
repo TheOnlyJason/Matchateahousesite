@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router';
 
-const NAV_LINKS = [
-  { to: '/', label: 'Home' },
+const HAMBURGER_LINKS = [
   { to: '/menu', label: 'Menu' },
   { to: '/careers', label: 'Career' },
 ] as const;
 
 const linkClass =
-  'text-white uppercase tracking-wider transition-opacity hover:opacity-90 focus:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent min-h-[44px] min-w-[44px] inline-flex items-center justify-center';
+  'text-white uppercase tracking-[0.28em] transition-all duration-300 ease-out hover:opacity-[0.85] hover:tracking-[0.32em] focus:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent min-h-[44px] min-w-[44px] inline-flex items-center justify-center';
 
 export function Navigation() {
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -30,12 +29,12 @@ export function Navigation() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Close mobile menu on route change
+  // Close nav panel on route change
   useEffect(() => {
     setMenuOpen(false);
   }, [pathname]);
 
-  // Prevent body scroll when mobile menu is open
+  // Prevent body scroll when nav panel is open
   useEffect(() => {
     if (menuOpen) {
       document.body.style.overflow = 'hidden';
@@ -61,23 +60,14 @@ export function Navigation() {
           Constance
         </Link>
 
-        {/* Desktop: inline links */}
-        <div className="hidden md:flex items-center gap-6 lg:gap-10">
-          <Link to="/menu" className={linkClass} style={{ fontSize: '0.75rem', fontWeight: 400 }}>
-            Menu
-          </Link>
-          <Link to="/careers" className={linkClass} style={{ fontSize: '0.75rem', fontWeight: 400 }}>
-            Career
-          </Link>
-        </div>
-
-        {/* Mobile: hamburger button */}
+        {/* Hamburger: opens Menu + Career on all screen sizes */}
         <button
           type="button"
-          className="md:hidden text-white p-2 -mr-2 min-h-[44px] min-w-[44px] inline-flex items-center justify-center rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
+          className="text-white p-2 -mr-2 min-h-[44px] min-w-[44px] inline-flex items-center justify-center rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
           onClick={() => setMenuOpen((o) => !o)}
           aria-expanded={menuOpen}
-          aria-controls="mobile-menu"
+          aria-controls="nav-menu-panel"
+          aria-haspopup="true"
           aria-label={menuOpen ? 'Close menu' : 'Open menu'}
         >
           <span className="sr-only">{menuOpen ? 'Close menu' : 'Open menu'}</span>
@@ -97,28 +87,37 @@ export function Navigation() {
         </button>
       </nav>
 
-      {/* Mobile menu overlay */}
+      {/* Full-screen panel: Menu + Career (tap hamburger to open) */}
       <div
-        id="mobile-menu"
-        className="fixed inset-0 z-40 md:hidden bg-[var(--stone-dark)]/95 backdrop-blur-sm flex flex-col items-center justify-center gap-2 py-20 px-6"
+        id="nav-menu-panel"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Site links"
+        className="fixed inset-0 z-40 bg-[var(--stone-dark)]/95 backdrop-blur-sm flex flex-col items-center justify-center gap-2 py-20 px-6"
         style={{
           visibility: menuOpen ? 'visible' : 'hidden',
           opacity: menuOpen ? 1 : 0,
           transition: 'opacity 0.2s ease, visibility 0.2s ease',
         }}
         aria-hidden={!menuOpen}
+        onClick={() => setMenuOpen(false)}
       >
-        {NAV_LINKS.map(({ to, label }) => (
-          <Link
-            key={to}
-            to={to}
-            className={`${linkClass} w-full max-w-xs py-4 text-center text-lg`}
-            style={{ fontWeight: 400 }}
-            onClick={() => setMenuOpen(false)}
-          >
-            {label}
-          </Link>
-        ))}
+        <div
+          className="flex flex-col items-center gap-2 w-full max-w-xs"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {HAMBURGER_LINKS.map(({ to, label }) => (
+            <Link
+              key={to}
+              to={to}
+              className={`${linkClass} w-full py-4 text-center text-lg md:text-xl`}
+              style={{ fontWeight: 400 }}
+              onClick={() => setMenuOpen(false)}
+            >
+              {label}
+            </Link>
+          ))}
+        </div>
       </div>
 
       {isHome && (

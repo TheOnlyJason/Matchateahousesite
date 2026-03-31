@@ -6,6 +6,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 interface Chapter2Props {
   data: {
+    kicker?: string;
     headline: string;
     description: string;
     videoUrl?: string;
@@ -30,7 +31,7 @@ export function Chapter2({ data }: Chapter2Props) {
         start: 'top top',
         end: '+=200%',
         pin: true,
-        scrub: 1,
+        scrub: 1.15,
         anticipatePin: 1,
       },
     });
@@ -42,12 +43,20 @@ export function Chapter2({ data }: Chapter2Props) {
       duration: 0.5,
     }, 0);
 
-    // Text parallax - slower than background
+    // Text: clip-path reveal + parallax
     tl.from(text, {
-      y: 100,
+      clipPath: 'inset(0 0 100% 0)',
+      y: 48,
       opacity: 0,
       duration: 0.3,
     }, 0.2);
+
+    tl.to(text, {
+      clipPath: 'inset(0 0 0% 0)',
+      y: 0,
+      opacity: 1,
+      duration: 0.35,
+    }, 0.25);
 
     tl.to(text, {
       y: -50,
@@ -55,9 +64,11 @@ export function Chapter2({ data }: Chapter2Props) {
     }, 0.5);
 
     return () => {
-      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
     };
   }, []);
+
+  const { kicker } = data;
 
   return (
     <div
@@ -99,10 +110,16 @@ export function Chapter2({ data }: Chapter2Props) {
           willChange: 'transform'
         }}
       >
-        <h2 className="text-white mb-4 sm:mb-6 tracking-wide uppercase" style={{ fontSize: 'clamp(1.75rem, 6vw, 4rem)', fontWeight: 300 }}>
+        {kicker ? (
+          <p className="luxury-kicker text-white/70 mb-6 sm:mb-8">{kicker}</p>
+        ) : null}
+        <h2
+          className="luxury-display text-white mb-4 sm:mb-6"
+          style={{ fontSize: 'clamp(2rem, 6.5vw, 4.25rem)' }}
+        >
           {data.headline}
         </h2>
-        <p className="text-white/90 max-w-2xl" style={{ fontSize: 'clamp(1rem, 2.5vw, 1.5rem)', fontWeight: 300, letterSpacing: '0.05em' }}>
+        <p className="luxury-body text-white/90 max-w-2xl" style={{ fontSize: 'clamp(1rem, 2.5vw, 1.5rem)' }}>
           {data.description}
         </p>
       </div>

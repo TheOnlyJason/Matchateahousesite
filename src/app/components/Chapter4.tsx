@@ -6,6 +6,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 interface Chapter4Props {
   data: {
+    kicker?: string;
     headline: string;
     description: string;
     sideNote?: {
@@ -47,17 +48,25 @@ export function Chapter4({ data }: Chapter4Props) {
         start: 'top top',
         end: '+=200%',
         pin: true,
-        scrub: 1,
+        scrub: 1.15,
         anticipatePin: 1,
       },
     });
 
-    // Text entrance
+    // Text: clip-path reveal
     tl.from(text, {
-      y: 100,
+      clipPath: 'inset(0 0 100% 0)',
+      y: 56,
       opacity: 0,
-      duration: 0.2,
+      duration: 0.22,
     }, 0);
+
+    tl.to(text, {
+      clipPath: 'inset(0 0 0% 0)',
+      y: 0,
+      opacity: 1,
+      duration: 0.28,
+    }, 0.08);
 
     // Draw SVG paths
     tl.to(paths, {
@@ -78,6 +87,8 @@ export function Chapter4({ data }: Chapter4Props) {
       ScrollTrigger.getAll().forEach(trigger => trigger.kill());
     };
   }, []);
+
+  const { kicker } = data;
 
   return (
     <div
@@ -141,10 +152,18 @@ export function Chapter4({ data }: Chapter4Props) {
           willChange: 'transform'
         }}
       >
-        <h2 className="mb-4 tracking-wide uppercase" style={{ fontSize: 'clamp(1.5rem, 5vw, 3.5rem)', fontWeight: 300, color: 'var(--stone-dark)' }}>
+        {kicker ? (
+          <p className="luxury-kicker mb-5 sm:mb-6" style={{ color: 'var(--luxury-moss)' }}>
+            {kicker}
+          </p>
+        ) : null}
+        <h2
+          className="luxury-display mb-4"
+          style={{ fontSize: 'clamp(1.75rem, 5.5vw, 3.75rem)', color: 'var(--luxury-charcoal)' }}
+        >
           {data.headline}
         </h2>
-        <p className="max-w-md" style={{ fontSize: 'clamp(0.9375rem, 2vw, 1.25rem)', fontWeight: 300, color: 'var(--stone-dark)', opacity: 0.8 }}>
+        <p className="luxury-body max-w-md" style={{ fontSize: 'clamp(0.9375rem, 2vw, 1.25rem)', color: 'var(--luxury-charcoal)', opacity: 0.82 }}>
           {data.description}
         </p>
       </div>
@@ -155,18 +174,18 @@ export function Chapter4({ data }: Chapter4Props) {
           ref={cardRef}
           className="absolute bottom-8 right-4 left-4 sm:bottom-16 sm:right-8 sm:left-auto md:bottom-24 md:right-24 p-6 sm:p-8 rounded-2xl backdrop-blur-xl"
           style={{
-            backgroundColor: 'rgba(255, 255, 255, 0.7)',
-            border: '1px solid rgba(255, 255, 255, 0.3)',
-            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+            backgroundColor: 'rgba(255, 255, 255, 0.72)',
+            border: '1px solid var(--luxury-line)',
+            boxShadow: '0 12px 48px rgba(28, 28, 28, 0.08)',
             transform: 'translateZ(0)',
             willChange: 'transform',
             maxWidth: '350px'
           }}
         >
-          <h3 className="mb-3 tracking-wide" style={{ fontSize: '1.5rem', fontWeight: 400, color: 'var(--matcha-dark)' }}>
+          <h3 className="luxury-kicker mb-3" style={{ fontSize: '0.6875rem', color: 'var(--luxury-moss)' }}>
             {data.sideNote.title}
           </h3>
-          <p style={{ fontSize: '1rem', fontWeight: 300, color: 'var(--stone-dark)', opacity: 0.8 }}>
+          <p className="luxury-body" style={{ fontSize: '1rem', color: 'var(--luxury-charcoal)', opacity: 0.85 }}>
             {data.sideNote.description}
           </p>
         </div>

@@ -13,12 +13,19 @@ import { Chapter6 } from '../components/Chapter6';
 const FRAME_COUNT = 192;
 
 const contentData = {
-  chapter2: { headline: "Farm to the Mill", description: "Nestled in the misty hills of Uji." },
-  chapter3: { headline: "Purity", description: "Every leaf is stone-ground." },
-  chapter4: { headline: "Precision", description: "80°C boundary.", sideNote: { title: "Temp", description: "Strict." }},
-  chapter5: { headline: "Community", description: "A space for reflection.", cta: { text: "Join", link: "#" }},
-  chapter6: { headline: "Visit", description: "Experience the ritual." },
-  contact: { address: "123 Matcha Lane", city: "SF", state: "CA", zip: "94103", email: "hi@tea.com", phone: "555" }
+  chapter2: { kicker: 'I · Origin', headline: 'Farm to the Mill', description: 'Nestled in the misty hills of Uji.' },
+  chapter3: { kicker: 'II · Process', headline: 'Purity', description: 'Every leaf is stone-ground.' },
+  chapter4: { kicker: 'III · Control', headline: 'Precision', description: '80°C boundary.', sideNote: { title: 'Temp', description: 'Strict.' } },
+  chapter5: { kicker: 'IV · Gather', headline: 'Community', description: 'A space for reflection.', cta: { text: 'Join', link: '#' } },
+  chapter6: { kicker: 'V · Arrive', headline: 'Visit', description: 'Experience the ritual.' },
+  contact: {
+    address: '123 Matcha Lane',
+    city: 'San Francisco',
+    state: 'CA',
+    zip: '94103',
+    email: 'inquiries@constance.sf',
+    phone: '(415) 555-0100',
+  },
 };
 
 export function HomePage() {
@@ -31,7 +38,11 @@ export function HomePage() {
 
   useEffect(() => {
     if (!isReady) return;
-    const lenis = new Lenis();
+    const lenis = new Lenis({
+      lerp: 0.065,
+      smoothWheel: true,
+      wheelMultiplier: 0.92,
+    });
     const raf = (time: number) => { lenis.raf(time); requestAnimationFrame(raf); };
     requestAnimationFrame(raf);
     return () => lenis.destroy();
@@ -45,10 +56,15 @@ export function HomePage() {
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1 }}>
             <FrameScrub images={images} />
             <div className="relative z-10">
+              <div className="chapter-spacer" aria-hidden />
               <Chapter2 data={contentData.chapter2} />
+              <div className="chapter-spacer" aria-hidden />
               <Chapter3 data={contentData.chapter3} />
+              <div className="chapter-spacer" aria-hidden />
               <Chapter4 data={contentData.chapter4} />
+              <div className="chapter-spacer" aria-hidden />
               <Chapter5 data={contentData.chapter5} />
+              <div className="chapter-spacer" aria-hidden />
               <Chapter6 data={contentData.chapter6} contact={contentData.contact} />
             </div>
           </motion.div>

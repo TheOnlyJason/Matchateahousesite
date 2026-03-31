@@ -2,7 +2,7 @@ import React from 'react';
 import { Routes, Route } from 'react-router';
 import { motion } from 'motion/react';
 import { Navigation } from './components/Navigation';
-import { CustomCursor } from './components/CustomCursor';
+import { ScrollToTop } from './components/ScrollToTop';
 import { HomePage } from './pages/HomePage';
 import { MenuPage } from './pages/MenuPage';
 import { CareerPage } from './pages/CareerPage';
@@ -10,7 +10,7 @@ import { CareerPage } from './pages/CareerPage';
 function App() {
   return (
     <main className="bg-background">
-      <CustomCursor />
+      <ScrollToTop />
       <Navigation />
       <motion.div
         initial={{ opacity: 0 }}

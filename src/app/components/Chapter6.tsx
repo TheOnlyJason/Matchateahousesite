@@ -7,6 +7,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 interface Chapter6Props {
   data: {
+    kicker?: string;
     headline: string;
     description: string;
   };
@@ -38,7 +39,7 @@ export function Chapter6({ data, contact }: Chapter6Props) {
         start: 'top top',
         end: '+=100%',
         pin: true,
-        scrub: 1,
+        scrub: 1.15,
         anticipatePin: 1,
       },
     });
@@ -62,21 +63,23 @@ export function Chapter6({ data, contact }: Chapter6Props) {
     };
   }, []);
 
+  const { kicker } = data;
+
   return (
     <div
       ref={sectionRef}
       className="relative h-screen w-full overflow-hidden"
       style={{ backgroundColor: 'var(--stone-warm-white)' }}
     >
-      {/* Hero Image */}
       <div className="absolute inset-0">
         <ImageWithFallback
           src="https://images.unsplash.com/photo-1765285775503-b7fb6b519d83?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx0ZWElMjBzaG9wJTIwaW50ZXJpb3IlMjB3YXJtJTIwd29vZHxlbnwxfHx8fDE3NzEzODQ2MzJ8MA&ixlib=rb-4.1.0&q=80&w=1080"
           alt="Tea studio interior"
           className="w-full h-full object-cover"
-          style={{ filter: 'brightness(0.7)' }}
+          style={{ filter: 'brightness(0.72) contrast(1.05)' }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent" />
+        <div className="film-grain" aria-hidden />
       </div>
 
       {/* Content */}
@@ -88,10 +91,11 @@ export function Chapter6({ data, contact }: Chapter6Props) {
           willChange: 'transform'
         }}
       >
-        <h2 className="text-white mb-4 sm:mb-6 tracking-wide uppercase" style={{ fontSize: 'clamp(1.75rem, 6vw, 4rem)', fontWeight: 300 }}>
+        {kicker ? <p className="luxury-kicker text-white/60 mb-6 sm:mb-8">{kicker}</p> : null}
+        <h2 className="luxury-display text-white mb-4 sm:mb-6" style={{ fontSize: 'clamp(2rem, 6.5vw, 4.25rem)' }}>
           {data.headline}
         </h2>
-        <p className="text-white/90 max-w-2xl mb-8 sm:mb-12" style={{ fontSize: 'clamp(1rem, 2.5vw, 1.5rem)', fontWeight: 300, letterSpacing: '0.05em' }}>
+        <p className="luxury-body text-white/88 max-w-2xl mb-8 sm:mb-12" style={{ fontSize: 'clamp(1rem, 2.5vw, 1.5rem)' }}>
           {data.description}
         </p>
       </div>
@@ -108,8 +112,8 @@ export function Chapter6({ data, contact }: Chapter6Props) {
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
           {/* Address */}
           <div>
-            <h3 className="uppercase tracking-wider mb-4" style={{ fontSize: '0.875rem', fontWeight: 500, opacity: 0.6 }}>
-              Visit Us
+            <h3 className="luxury-kicker mb-4" style={{ color: 'rgba(255,255,255,0.55)' }}>
+              Visit
             </h3>
             <p style={{ fontSize: '1rem', fontWeight: 300, lineHeight: 1.6 }}>
               {contact.address}<br />
@@ -119,15 +123,23 @@ export function Chapter6({ data, contact }: Chapter6Props) {
 
           {/* Contact */}
           <div>
-            <h3 className="uppercase tracking-wider mb-4" style={{ fontSize: '0.875rem', fontWeight: 500, opacity: 0.6 }}>
-              Contact
+            <h3 className="luxury-kicker mb-4" style={{ color: 'rgba(255,255,255,0.55)' }}>
+              Inquiries
             </h3>
-            <p style={{ fontSize: '1rem', fontWeight: 300, lineHeight: 1.6 }}>
-              <a href={`mailto:${contact.email}`} className="inline-block py-2 -my-2 hover:text-[var(--matcha-green)] transition-colors min-h-[44px] min-w-[44px] flex items-center">
+            <p style={{ fontSize: '1rem', fontWeight: 300, lineHeight: 1.65, fontFamily: 'var(--font-body)' }}>
+              <a
+                href={`mailto:${contact.email}`}
+                className="inline-block py-2 -my-2 transition-colors duration-300 min-h-[44px] min-w-[44px] flex items-center hover:text-[var(--luxury-moss-hover)]"
+                style={{ color: 'rgba(255,255,255,0.92)' }}
+              >
                 {contact.email}
               </a>
               <br />
-              <a href={`tel:${contact.phone}`} className="inline-block py-2 -my-2 hover:text-[var(--matcha-green)] transition-colors min-h-[44px] min-w-[44px] flex items-center">
+              <a
+                href={`tel:${contact.phone.replace(/[^\d+]/g, '')}`}
+                className="inline-block py-2 -my-2 transition-colors duration-300 min-h-[44px] min-w-[44px] flex items-center hover:text-[var(--luxury-moss-hover)]"
+                style={{ color: 'rgba(255,255,255,0.92)' }}
+              >
                 {contact.phone}
               </a>
             </p>
@@ -135,7 +147,7 @@ export function Chapter6({ data, contact }: Chapter6Props) {
 
           {/* Hours */}
           <div>
-            <h3 className="uppercase tracking-wider mb-4" style={{ fontSize: '0.875rem', fontWeight: 500, opacity: 0.6 }}>
+            <h3 className="luxury-kicker mb-4" style={{ color: 'rgba(255,255,255,0.55)' }}>
               Hours
             </h3>
             <p style={{ fontSize: '1rem', fontWeight: 300, lineHeight: 1.6 }}>

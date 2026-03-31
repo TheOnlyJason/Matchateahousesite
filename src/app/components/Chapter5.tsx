@@ -7,6 +7,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 interface Chapter5Props {
   data: {
+    kicker?: string;
     headline: string;
     description: string;
     cta?: {
@@ -32,7 +33,8 @@ export function Chapter5({ data }: Chapter5Props) {
     const text = textRef.current;
     const cta = ctaRef.current;
 
-    if (!section || !img1 || !img2 || !img3 || !text || !cta) return;
+    if (!section || !img1 || !img2 || !img3 || !text) return;
+    if (data.cta && !cta) return;
 
     const tl = gsap.timeline({
       scrollTrigger: {
@@ -40,32 +42,33 @@ export function Chapter5({ data }: Chapter5Props) {
         start: 'top top',
         end: '+=200%',
         pin: true,
-        scrub: 1,
+        scrub: 1.15,
         anticipatePin: 1,
       },
     });
 
-    // Stacking effect for images
     tl.from(img1, {
-      x: -200,
-      rotation: -10,
+      x: -120,
+      rotation: -6,
       opacity: 0,
-      duration: 0.3,
+      duration: 0.35,
     }, 0);
 
     tl.from(img2, {
-      y: 200,
-      rotation: 5,
+      y: 160,
+      x: 40,
+      rotation: 4,
       opacity: 0,
-      duration: 0.3,
-    }, 0.1);
+      duration: 0.35,
+    }, 0.08);
 
     tl.from(img3, {
-      x: 200,
-      rotation: 10,
+      x: 140,
+      y: 40,
+      rotation: 7,
       opacity: 0,
-      duration: 0.3,
-    }, 0.2);
+      duration: 0.35,
+    }, 0.16);
 
     // Text entrance
     tl.from(text, {
@@ -74,33 +77,39 @@ export function Chapter5({ data }: Chapter5Props) {
       duration: 0.2,
     }, 0.3);
 
-    // CTA glow effect
-    tl.from(cta, {
-      scale: 0.8,
-      opacity: 0,
-      duration: 0.2,
-    }, 0.5);
+    if (cta) {
+      tl.from(cta, {
+        scale: 0.8,
+        opacity: 0,
+        duration: 0.2,
+      }, 0.5);
+    }
 
     return () => {
-      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
     };
-  }, []);
+  }, [data.cta]);
+
+  const { kicker } = data;
+
+  const imgTone = 'grayscale(100%) contrast(1.12) brightness(0.96)';
 
   return (
     <div
       ref={sectionRef}
       className="relative h-screen w-full overflow-hidden bg-black"
     >
-      {/* Editorial Collage */}
+      <div className="film-grain" aria-hidden />
+
       <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
-        {/* Image 1 - Team collaboration */}
         <div
           ref={image1Ref}
-          className="absolute w-[55vw] max-w-[280px] sm:max-w-[340px] md:w-[400px] h-[65vw] max-h-[360px] sm:max-h-[420px] md:h-[500px] left-[2%] sm:left-[8%] top-[12%] shadow-2xl"
-          style={{ 
-            transform: 'translateZ(0) rotate(-5deg)',
+          className="absolute left-[0%] sm:left-[2%] md:left-[4%] top-[8%] md:top-[10%] w-[min(92vw,560px)] md:w-[min(68vw,640px)] h-[min(100vw,640px)] md:h-[min(74vh,700px)] shadow-[0_32px_80px_rgba(0,0,0,0.55)] z-[1]"
+          style={{
+            transform: 'translateZ(0) rotate(-4deg)',
             willChange: 'transform',
-            filter: 'grayscale(100%) contrast(1.2)'
+            filter: imgTone,
+            border: '1px solid rgba(255,255,255,0.12)',
           }}
         >
           <ImageWithFallback
@@ -110,14 +119,14 @@ export function Chapter5({ data }: Chapter5Props) {
           />
         </div>
 
-        {/* Image 2 - Cupping bowl */}
         <div
           ref={image2Ref}
-          className="absolute w-[50vw] max-w-[260px] sm:max-w-[300px] md:w-[350px] h-[58vw] max-h-[320px] sm:max-h-[380px] md:h-[450px] right-[2%] sm:right-[10%] top-[22%] shadow-2xl"
-          style={{ 
-            transform: 'translateZ(0) rotate(3deg)',
+          className="absolute right-[0%] sm:right-[4%] md:right-[7%] top-[14%] md:top-[16%] w-[min(48vw,320px)] md:w-[min(36vw,340px)] h-[min(58vw,420px)] md:h-[min(48vh,480px)] shadow-[0_24px_64px_rgba(0,0,0,0.5)] z-[3]"
+          style={{
+            transform: 'translateZ(0) rotate(5deg)',
             willChange: 'transform',
-            filter: 'grayscale(100%) contrast(1.2)'
+            filter: imgTone,
+            border: '1px solid rgba(255,255,255,0.22)',
           }}
         >
           <ImageWithFallback
@@ -127,14 +136,14 @@ export function Chapter5({ data }: Chapter5Props) {
           />
         </div>
 
-        {/* Image 3 - Hands/craftsmanship */}
         <div
           ref={image3Ref}
-          className="absolute w-[45vw] max-w-[220px] sm:max-w-[260px] md:w-[300px] h-[55vw] max-h-[280px] sm:max-h-[340px] md:h-[400px] left-[28%] sm:left-[32%] bottom-[8%] shadow-2xl"
-          style={{ 
-            transform: 'translateZ(0) rotate(-3deg)',
+          className="absolute left-[14%] md:left-[20%] bottom-[5%] md:bottom-[8%] w-[min(44vw,280px)] md:w-[min(32vw,300px)] h-[min(52vw,340px)] md:h-[min(40vh,400px)] shadow-[0_20px_56px_rgba(0,0,0,0.45)] z-[2]"
+          style={{
+            transform: 'translateZ(0) rotate(-5deg)',
             willChange: 'transform',
-            filter: 'grayscale(100%) contrast(1.2)'
+            filter: imgTone,
+            border: '1px solid rgba(255,255,255,0.1)',
           }}
         >
           <ImageWithFallback
@@ -145,19 +154,19 @@ export function Chapter5({ data }: Chapter5Props) {
         </div>
       </div>
 
-      {/* Text Content */}
       <div
         ref={textRef}
-        className="absolute top-10 right-4 left-4 sm:top-14 sm:right-8 md:top-16 md:right-16 text-right max-w-lg z-10"
-        style={{ 
+        className="absolute top-10 right-4 left-4 sm:top-14 sm:right-8 md:top-[4.5rem] md:right-12 lg:right-20 text-left md:text-right max-w-lg md:max-w-xl ml-auto z-10"
+        style={{
           transform: 'translateZ(0)',
-          willChange: 'transform'
+          willChange: 'transform',
         }}
       >
-        <h2 className="text-white mb-3 sm:mb-4 tracking-wide uppercase" style={{ fontSize: 'clamp(1.5rem, 5vw, 3.5rem)', fontWeight: 300 }}>
+        {kicker ? <p className="luxury-kicker text-white/55 mb-6 md:mb-8">{kicker}</p> : null}
+        <h2 className="luxury-display text-white mb-3 sm:mb-5" style={{ fontSize: 'clamp(1.75rem, 5.5vw, 3.75rem)' }}>
           {data.headline}
         </h2>
-        <p className="text-white/80" style={{ fontSize: 'clamp(0.9375rem, 2vw, 1.25rem)', fontWeight: 300 }}>
+        <p className="luxury-body text-white/78" style={{ fontSize: 'clamp(0.9375rem, 2vw, 1.25rem)' }}>
           {data.description}
         </p>
       </div>
