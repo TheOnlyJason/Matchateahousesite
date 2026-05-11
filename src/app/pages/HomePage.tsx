@@ -10,6 +10,7 @@ import { Chapter4 } from '../components/Chapter4';
 import { Chapter5 } from '../components/Chapter5';
 import { Chapter6 } from '../components/Chapter6';
 import { HomeSectionNav, type HomeNavSection } from '../components/HomeSectionNav';
+import { publicAssetBase } from '../utils/publicAssetBase';
 
 const FRAME_COUNT = 192;
 
@@ -71,7 +72,7 @@ const contentData = {
 export function HomePage() {
   const [lenis, setLenis] = useState<Lenis | null>(null);
   const frameUrls = useMemo(() => {
-    const base = import.meta.env.BASE_URL;
+    const base = publicAssetBase();
     return Array.from({ length: FRAME_COUNT }, (_, i) =>
       `${base}frames/${(i + 1).toString().padStart(4, '0')}.jpg`
     );
