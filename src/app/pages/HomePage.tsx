@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import Lenis from 'lenis';
 import { motion, AnimatePresence } from 'motion/react';
 import { useImagePreloader } from '../hooks/useImagePreloader';
@@ -9,26 +9,67 @@ import { Chapter3 } from '../components/Chapter3';
 import { Chapter4 } from '../components/Chapter4';
 import { Chapter5 } from '../components/Chapter5';
 import { Chapter6 } from '../components/Chapter6';
+import { HomeSectionNav, type HomeNavSection } from '../components/HomeSectionNav';
 
 const FRAME_COUNT = 192;
 
+const HOME_NAV_SECTIONS: readonly HomeNavSection[] = [
+  { id: 'home-hero', label: 'Home' },
+  { id: 'home-freshness', label: 'Freshness' },
+  { id: 'home-source', label: 'Source' },
+  { id: 'home-extraction', label: 'Extract' },
+  { id: 'home-who', label: 'Obsession' },
+  { id: 'home-studio', label: 'Studio' },
+];
+
 const contentData = {
-  chapter2: { kicker: 'I · Origin', headline: 'Farm to the Mill', description: 'Nestled in the misty hills of Uji.' },
-  chapter3: { kicker: 'II · Process', headline: 'Purity', description: 'Every leaf is stone-ground.' },
-  chapter4: { kicker: 'III · Control', headline: 'Precision', description: '80°C boundary.', sideNote: { title: 'Temp', description: 'Strict.' } },
-  chapter5: { kicker: 'IV · Gather', headline: 'Community', description: 'A space for reflection.', cta: { text: 'Join', link: '#' } },
-  chapter6: { kicker: 'V · Arrive', headline: 'Visit', description: 'Experience the ritual.' },
+  chapter2: {
+    headline: 'The Source',
+    description:
+      'Straight from Uji, Japan, we work directly with heritage farmers to source single-cultivar tencha. Zero blends. Zero compromise. Just the pure expression of the soil.',
+  },
+  chapter3: {
+    headline: 'Freshness is the new standard.',
+    description:
+      "It is the shortest distance between a Japanese farm and your San Francisco cup. Freshness you can see. By milling in-house, we capture the farmer's intention and the true delicacy of the harvest. It is a moment of clarity you have to taste to believe.",
+  },
+  chapter4: {
+    headline: 'The Physics of Extraction',
+    description:
+      'Traditional ceremony, engineered for precision. We utilize proprietary extraction technology that controls pressure, temperature, and flow to the decimal point.',
+    sideNote: {
+      title: 'Also pouring',
+      description: 'High-mountain oolong, sourced directly from Taiwan.',
+    },
+  },
+  chapter5: {
+    kicker: 'Who we are',
+    headline: 'Engineered by Obsession',
+    subhead: 'Traditional ritual. Modern rhythm.',
+    description:
+      'Technology handles the consistency; we handle the connection. We built this space for the community—an experience to slow down and taste the difference.',
+    cta: { text: 'Join our team', link: '/careers' },
+  },
+  chapter6: {
+    headline: 'The Studio',
+    description:
+      'A curated space for connection in the Richmond District. Part laboratory, part sanctuary. Join us for private tastings, educational workshops, and a moment of pause in a chaotic world.',
+    signoff: 'Elevating your daily pour through the science of craft and the soul of the leaves.',
+  },
   contact: {
-    address: '123 Matcha Lane',
+    venueName: 'Constance',
+    address: '3512 Balboa St.',
     city: 'San Francisco',
     state: 'CA',
-    zip: '94103',
-    email: 'inquiries@constance.sf',
+    zip: '94121',
+    neighborhood: 'Richmond District',
+    email: 'hello@constance.sf',
     phone: '(415) 555-0100',
   },
 };
 
 export function HomePage() {
+  const [lenis, setLenis] = useState<Lenis | null>(null);
   const frameUrls = useMemo(() =>
     Array.from({ length: FRAME_COUNT }, (_, i) =>
       `/frames/${(i + 1).toString().padStart(4, '0')}.jpg`
@@ -38,14 +79,21 @@ export function HomePage() {
 
   useEffect(() => {
     if (!isReady) return;
-    const lenis = new Lenis({
+    const instance = new Lenis({
       lerp: 0.065,
       smoothWheel: true,
       wheelMultiplier: 0.92,
     });
-    const raf = (time: number) => { lenis.raf(time); requestAnimationFrame(raf); };
+    setLenis(instance);
+    const raf = (time: number) => {
+      instance.raf(time);
+      requestAnimationFrame(raf);
+    };
     requestAnimationFrame(raf);
-    return () => lenis.destroy();
+    return () => {
+      setLenis(null);
+      instance.destroy();
+    };
   }, [isReady]);
 
   return (
@@ -54,18 +102,31 @@ export function HomePage() {
       <AnimatePresence>
         {isReady && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1 }}>
-            <FrameScrub images={images} />
+            <HomeSectionNav lenis={lenis} sections={HOME_NAV_SECTIONS} />
+            <section id="home-hero" className="relative" aria-label="Home">
+              <FrameScrub images={images} />
+            </section>
             <div className="relative z-10">
               <div className="chapter-spacer" aria-hidden />
-              <Chapter2 data={contentData.chapter2} />
+              <section id="home-freshness" className="relative" aria-label="Freshness">
+                <Chapter3 data={contentData.chapter3} />
+              </section>
               <div className="chapter-spacer" aria-hidden />
-              <Chapter3 data={contentData.chapter3} />
+              <section id="home-source" className="relative" aria-label="The Source">
+                <Chapter2 data={contentData.chapter2} />
+              </section>
               <div className="chapter-spacer" aria-hidden />
-              <Chapter4 data={contentData.chapter4} />
+              <section id="home-extraction" className="relative" aria-label="Extraction">
+                <Chapter4 data={contentData.chapter4} />
+              </section>
               <div className="chapter-spacer" aria-hidden />
-              <Chapter5 data={contentData.chapter5} />
+              <section id="home-who" className="relative" aria-label="Who we are">
+                <Chapter5 data={contentData.chapter5} />
+              </section>
               <div className="chapter-spacer" aria-hidden />
-              <Chapter6 data={contentData.chapter6} contact={contentData.contact} />
+              <section id="home-studio" className="relative" aria-label="The Studio">
+                <Chapter6 data={contentData.chapter6} contact={contentData.contact} />
+              </section>
             </div>
           </motion.div>
         )}

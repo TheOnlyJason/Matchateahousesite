@@ -10,12 +10,15 @@ interface Chapter6Props {
     kicker?: string;
     headline: string;
     description: string;
+    signoff?: string;
   };
   contact: {
+    venueName?: string;
     address: string;
     city: string;
     state: string;
     zip: string;
+    neighborhood?: string;
     email: string;
     phone: string;
   };
@@ -63,7 +66,7 @@ export function Chapter6({ data, contact }: Chapter6Props) {
     };
   }, []);
 
-  const { kicker } = data;
+  const { kicker, signoff } = data;
 
   return (
     <div
@@ -95,9 +98,17 @@ export function Chapter6({ data, contact }: Chapter6Props) {
         <h2 className="luxury-display text-white mb-4 sm:mb-6" style={{ fontSize: 'clamp(2rem, 6.5vw, 4.25rem)' }}>
           {data.headline}
         </h2>
-        <p className="luxury-body text-white/88 max-w-2xl mb-8 sm:mb-12" style={{ fontSize: 'clamp(1rem, 2.5vw, 1.5rem)' }}>
+        <p className="luxury-body text-white/88 max-w-2xl mb-6 sm:mb-8" style={{ fontSize: 'clamp(1rem, 2.5vw, 1.5rem)' }}>
           {data.description}
         </p>
+        {signoff ? (
+          <p
+            className="luxury-body text-white/72 max-w-2xl italic"
+            style={{ fontSize: 'clamp(0.9375rem, 2vw, 1.2rem)', lineHeight: 1.55 }}
+          >
+            {signoff}
+          </p>
+        ) : null}
       </div>
 
       {/* Footer */}
@@ -116,8 +127,21 @@ export function Chapter6({ data, contact }: Chapter6Props) {
               Visit
             </h3>
             <p style={{ fontSize: '1rem', fontWeight: 300, lineHeight: 1.6 }}>
-              {contact.address}<br />
+              {contact.venueName ? (
+                <>
+                  {contact.venueName}
+                  <br />
+                </>
+              ) : null}
+              {contact.address}
+              <br />
               {contact.city}, {contact.state} {contact.zip}
+              {contact.neighborhood ? (
+                <>
+                  <br />
+                  <span style={{ opacity: 0.88 }}>{contact.neighborhood}</span>
+                </>
+              ) : null}
             </p>
           </div>
 

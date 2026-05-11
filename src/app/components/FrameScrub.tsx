@@ -74,10 +74,27 @@ export function FrameScrub({ images }: FrameScrubProps) {
         className="absolute inset-0 w-full h-full object-cover"
         style={{ width: '100%', height: '100%' }}
       />
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none px-4">
-        <h1 className="text-white font-extralight tracking-[0.2em] sm:tracking-[0.3em] uppercase mix-blend-difference text-center text-3xl sm:text-4xl md:text-5xl lg:text-6xl">
-          Farm To The Mill
-        </h1>
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none px-4 sm:px-8">
+        <div className="max-w-4xl text-center space-y-4 sm:space-y-5 md:space-y-6">
+          <p
+            className="text-white/90 font-extralight tracking-[0.38em] sm:tracking-[0.42em] uppercase"
+            style={{ fontSize: 'clamp(2.25rem, 7vw, 4.5rem)', lineHeight: 1.05 }}
+          >
+            CONSTANCE
+          </p>
+          <p
+            className="text-white/85 font-light tracking-[0.22em] sm:tracking-[0.28em] uppercase"
+            style={{ fontSize: 'clamp(0.8125rem, 2.2vw, 1rem)' }}
+          >
+            San Francisco
+          </p>
+          <p
+            className="text-white/80 font-light max-w-xl mx-auto leading-relaxed"
+            style={{ fontSize: 'clamp(0.9375rem, 2.1vw, 1.125rem)', letterSpacing: '0.02em' }}
+          >
+            Sourced from the farm. Milled by stone. Brewed to the milligram.
+          </p>
+        </div>
       </div>
     </div>
   );

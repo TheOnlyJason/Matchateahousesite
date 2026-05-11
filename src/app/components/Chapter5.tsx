@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import { Link } from 'react-router';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ImageWithFallback } from './figma/ImageWithFallback';
@@ -9,6 +10,7 @@ interface Chapter5Props {
   data: {
     kicker?: string;
     headline: string;
+    subhead?: string;
     description: string;
     cta?: {
       text: string;
@@ -23,7 +25,7 @@ export function Chapter5({ data }: Chapter5Props) {
   const image2Ref = useRef<HTMLDivElement>(null);
   const image3Ref = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
-  const ctaRef = useRef<HTMLButtonElement>(null);
+  const ctaRef = useRef<HTMLAnchorElement>(null);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -34,7 +36,7 @@ export function Chapter5({ data }: Chapter5Props) {
     const cta = ctaRef.current;
 
     if (!section || !img1 || !img2 || !img3 || !text) return;
-    if (data.cta && !cta) return;
+    if (Boolean(data.cta) && !cta) return;
 
     const tl = gsap.timeline({
       scrollTrigger: {
@@ -90,7 +92,7 @@ export function Chapter5({ data }: Chapter5Props) {
     };
   }, [data.cta]);
 
-  const { kicker } = data;
+  const { kicker, subhead } = data;
 
   const imgTone = 'grayscale(100%) contrast(1.12) brightness(0.96)';
 
@@ -166,6 +168,14 @@ export function Chapter5({ data }: Chapter5Props) {
         <h2 className="luxury-display text-white mb-3 sm:mb-5" style={{ fontSize: 'clamp(1.75rem, 5.5vw, 3.75rem)' }}>
           {data.headline}
         </h2>
+        {subhead ? (
+          <p
+            className="luxury-body text-white/70 mb-4 sm:mb-5"
+            style={{ fontSize: 'clamp(1rem, 2.2vw, 1.2rem)', letterSpacing: '0.04em' }}
+          >
+            {subhead}
+          </p>
+        ) : null}
         <p className="luxury-body text-white/78" style={{ fontSize: 'clamp(0.9375rem, 2vw, 1.25rem)' }}>
           {data.description}
         </p>
@@ -173,10 +183,10 @@ export function Chapter5({ data }: Chapter5Props) {
 
       {/* CTA Button */}
       {data.cta && (
-        <button
+        <Link
           ref={ctaRef}
-          type="button"
-          className="absolute bottom-8 sm:bottom-16 left-1/2 -translate-x-1/2 px-8 sm:px-12 py-3 sm:py-4 min-h-[48px] rounded-full border-2 border-white text-white uppercase tracking-wider transition-all hover:bg-white hover:text-black focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+          to={data.cta.link}
+          className="absolute bottom-8 sm:bottom-16 left-1/2 -translate-x-1/2 px-8 sm:px-12 py-3 sm:py-4 min-h-[48px] rounded-full border-2 border-white text-white uppercase tracking-wider transition-all hover:bg-white hover:text-black focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black inline-flex items-center justify-center text-center no-underline"
           style={{
             fontSize: '0.875rem',
             fontWeight: 500,
@@ -198,7 +208,7 @@ export function Chapter5({ data }: Chapter5Props) {
           }}
         >
           {data.cta.text}
-        </button>
+        </Link>
       )}
     </div>
   );
