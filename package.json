@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "vite build",
+    "postbuild": "node ./scripts/gh-pages-404.mjs",
     "dev": "vite"
   },
   "dependencies": {
