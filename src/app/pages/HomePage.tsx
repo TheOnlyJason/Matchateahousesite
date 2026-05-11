@@ -70,10 +70,12 @@ const contentData = {
 
 export function HomePage() {
   const [lenis, setLenis] = useState<Lenis | null>(null);
-  const frameUrls = useMemo(() =>
-    Array.from({ length: FRAME_COUNT }, (_, i) =>
-      `/frames/${(i + 1).toString().padStart(4, '0')}.jpg`
-    ), []);
+  const frameUrls = useMemo(() => {
+    const base = import.meta.env.BASE_URL;
+    return Array.from({ length: FRAME_COUNT }, (_, i) =>
+      `${base}frames/${(i + 1).toString().padStart(4, '0')}.jpg`
+    );
+  }, []);
 
   const { progress, isReady, images } = useImagePreloader(frameUrls);
 
