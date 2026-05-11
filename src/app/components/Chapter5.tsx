@@ -99,14 +99,12 @@ export function Chapter5({ data }: Chapter5Props) {
   return (
     <div
       ref={sectionRef}
-      className="relative h-screen w-full overflow-hidden bg-black"
+      className="relative h-screen w-full overflow-hidden bg-black isolate"
     >
-      <div className="film-grain" aria-hidden />
-
-      <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
+      <div className="absolute inset-0 z-0 flex items-center justify-center overflow-hidden">
         <div
           ref={image1Ref}
-          className="absolute left-[0%] sm:left-[2%] md:left-[4%] top-[8%] md:top-[10%] w-[min(92vw,560px)] md:w-[min(68vw,640px)] h-[min(100vw,640px)] md:h-[min(74vh,700px)] shadow-[0_32px_80px_rgba(0,0,0,0.55)] z-[1]"
+          className="absolute left-[0%] sm:left-[2%] md:left-[3%] top-[10%] md:top-[12%] w-[min(88vw,480px)] md:w-[min(52vw,520px)] h-[min(92vw,520px)] md:h-[min(62vh,580px)] shadow-[0_32px_80px_rgba(0,0,0,0.55)] z-[1]"
           style={{
             transform: 'translateZ(0) rotate(-4deg)',
             willChange: 'transform',
@@ -123,7 +121,7 @@ export function Chapter5({ data }: Chapter5Props) {
 
         <div
           ref={image2Ref}
-          className="absolute right-[0%] sm:right-[4%] md:right-[7%] top-[14%] md:top-[16%] w-[min(48vw,320px)] md:w-[min(36vw,340px)] h-[min(58vw,420px)] md:h-[min(48vh,480px)] shadow-[0_24px_64px_rgba(0,0,0,0.5)] z-[3]"
+          className="absolute right-[0%] sm:right-[3%] md:right-[5%] top-[18%] md:top-[24%] w-[min(42vw,280px)] md:w-[min(28vw,300px)] h-[min(50vw,360px)] md:h-[min(38vh,400px)] shadow-[0_24px_64px_rgba(0,0,0,0.5)] z-[2]"
           style={{
             transform: 'translateZ(0) rotate(5deg)',
             willChange: 'transform',
@@ -140,7 +138,7 @@ export function Chapter5({ data }: Chapter5Props) {
 
         <div
           ref={image3Ref}
-          className="absolute left-[14%] md:left-[20%] bottom-[5%] md:bottom-[8%] w-[min(44vw,280px)] md:w-[min(32vw,300px)] h-[min(52vw,340px)] md:h-[min(40vh,400px)] shadow-[0_20px_56px_rgba(0,0,0,0.45)] z-[2]"
+          className="absolute left-[10%] md:left-[14%] bottom-[6%] md:bottom-[10%] w-[min(40vw,260px)] md:w-[min(28vw,280px)] h-[min(48vw,300px)] md:h-[min(36vh,360px)] shadow-[0_20px_56px_rgba(0,0,0,0.45)] z-[3]"
           style={{
             transform: 'translateZ(0) rotate(-5deg)',
             willChange: 'transform',
@@ -156,16 +154,24 @@ export function Chapter5({ data }: Chapter5Props) {
         </div>
       </div>
 
+      <div className="film-grain z-[4]" aria-hidden />
+
       <div
         ref={textRef}
-        className="absolute top-10 right-4 left-4 sm:top-14 sm:right-8 md:top-[4.5rem] md:right-12 lg:right-20 text-left md:text-right max-w-lg md:max-w-xl ml-auto z-10"
+        className="absolute top-10 right-4 left-4 z-[20] sm:top-14 sm:right-8 md:top-[4.5rem] md:right-10 lg:right-16 max-w-lg md:max-w-[min(36rem,48vw)] ml-auto text-left md:text-right rounded-sm border border-white/[0.06] bg-black/45 px-5 py-6 shadow-[0_24px_80px_rgba(0,0,0,0.45)] backdrop-blur-sm sm:px-7 sm:py-8 md:px-9 md:py-9"
         style={{
           transform: 'translateZ(0)',
           willChange: 'transform',
         }}
       >
         {kicker ? <p className="luxury-kicker text-white/55 mb-6 md:mb-8">{kicker}</p> : null}
-        <h2 className="luxury-display text-white mb-3 sm:mb-5" style={{ fontSize: 'clamp(1.75rem, 5.5vw, 3.75rem)' }}>
+        <h2
+          className="luxury-display mb-3 text-balance text-white sm:mb-5"
+          style={{
+            fontSize: 'clamp(1.75rem, 5.5vw, 3.75rem)',
+            textShadow: '0 2px 28px rgba(0,0,0,0.55)',
+          }}
+        >
           {data.headline}
         </h2>
         {subhead ? (
@@ -186,7 +192,7 @@ export function Chapter5({ data }: Chapter5Props) {
         <Link
           ref={ctaRef}
           to={data.cta.link}
-          className="absolute bottom-8 sm:bottom-16 left-1/2 -translate-x-1/2 px-8 sm:px-12 py-3 sm:py-4 min-h-[48px] rounded-full border-2 border-white text-white uppercase tracking-wider transition-all hover:bg-white hover:text-black focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black inline-flex items-center justify-center text-center no-underline"
+          className="absolute bottom-8 z-[25] sm:bottom-16 left-1/2 -translate-x-1/2 px-8 sm:px-12 py-3 sm:py-4 min-h-[48px] rounded-full border-2 border-white text-white uppercase tracking-wider transition-all hover:bg-white hover:text-black focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black inline-flex items-center justify-center text-center no-underline"
           style={{
             fontSize: '0.875rem',
             fontWeight: 500,
