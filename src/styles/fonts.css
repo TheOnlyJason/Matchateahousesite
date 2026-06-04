@@ -1,14 +1,12 @@
-/* Premium Typography for CONSTANCE Matcha Teahouse */
+/* Typography — Constance */
 
-/* Import elegant Google Fonts for the stone-themed aesthetic */
-@import url('https://fonts.googleapis.com/css2?family=Cormorant:wght@300;400;500&family=Inter:wght@300;400;500&display=swap');
-
-/* Cormorant for headings - elegant serif that evokes luxury tea houses */
-/* Inter for body text - clean, modern sans-serif */
+/* Nunito: headings — Regular 400, Italic 400i, Medium 500, Bold 700 */
+/* Libre Franklin: body — Regular 400, Italic 400i, Medium 500, Bold 700 */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&family=Libre+Franklin:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&display=swap');
 
 :root {
-  --font-heading: 'Cormorant', serif;
-  --font-body: 'Inter', sans-serif;
+  --font-heading: 'Nunito', sans-serif;
+  --font-body: 'Libre Franklin', sans-serif;
 }
 
 body {

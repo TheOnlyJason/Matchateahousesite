@@ -183,8 +183,14 @@ export function Chapter6({ data, contact }: Chapter6Props) {
 
         {/* Copyright */}
         <div className="max-w-7xl mx-auto mt-6 sm:mt-8 pt-6 sm:pt-8 border-t border-white/20 text-center">
-          <p style={{ fontSize: '0.875rem', fontWeight: 300, opacity: 0.5 }}>
-            © 2026 CONSTANCE. All rights reserved.
+          <img
+            src="/constance-stacked-white.svg"
+            alt="Constance"
+            className="mx-auto mb-4"
+            style={{ height: '44px', width: 'auto', opacity: 0.6 }}
+          />
+          <p style={{ fontSize: '0.875rem', fontWeight: 300, opacity: 0.4 }}>
+            © 2026 Constance. All rights reserved.
           </p>
         </div>
       </div>

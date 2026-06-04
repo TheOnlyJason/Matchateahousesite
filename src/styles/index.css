@@ -124,5 +124,4 @@ canvas {
 /* Breathing room between story sections */
 .chapter-spacer {
   min-height: clamp(18vh, 28vw, 36vh);
-  background-color: var(--stone-warm-white);
 }

@@ -18,16 +18,19 @@ export function LoadingScreen({ progress, isReady }: LoadingScreenProps) {
           transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
         >
           <div className="text-center">
-            {/* Brand Name */}
-            <motion.h1
-              className="mb-6 sm:mb-8 tracking-[0.2em] sm:tracking-[0.3em] uppercase px-4 text-center"
-              style={{ fontSize: 'clamp(1.75rem, 8vw, 3rem)', fontWeight: 200, color: 'var(--stone-dark)' }}
+            {/* Brand Logo */}
+            <motion.div
+              className="mb-6 sm:mb-8 flex items-center justify-center"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
             >
-              Constance
-            </motion.h1>
+              <img
+                src="/constance-stacked-black.svg"
+                alt="Constance"
+                style={{ height: 'clamp(64px, 12vw, 96px)', width: 'auto' }}
+              />
+            </motion.div>
 
             {/* Progress Bar Container */}
             <div className="w-56 sm:w-64 h-0.5 bg-black/10 rounded-full overflow-hidden relative">

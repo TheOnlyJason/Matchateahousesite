@@ -109,24 +109,19 @@ export function HomePage() {
             <section id="home-hero" className="relative" aria-label="Home">
               <FrameScrub images={images} />
             </section>
-            <div className="relative z-10">
-              <div className="chapter-spacer" aria-hidden />
+            <div className="relative z-10 flex flex-col">
               <section id="home-freshness" className="relative" aria-label="Freshness">
                 <Chapter3 data={contentData.chapter3} />
               </section>
-              <div className="chapter-spacer" aria-hidden />
               <section id="home-source" className="relative" aria-label="The Source">
                 <Chapter2 data={contentData.chapter2} />
               </section>
-              <div className="chapter-spacer" aria-hidden />
               <section id="home-extraction" className="relative" aria-label="Extraction">
                 <Chapter4 data={contentData.chapter4} />
               </section>
-              <div className="chapter-spacer" aria-hidden />
               <section id="home-who" className="relative" aria-label="Who we are">
                 <Chapter5 data={contentData.chapter5} />
               </section>
-              <div className="chapter-spacer" aria-hidden />
               <section id="home-studio" className="relative" aria-label="The Studio">
                 <Chapter6 data={contentData.chapter6} contact={contentData.contact} />
               </section>

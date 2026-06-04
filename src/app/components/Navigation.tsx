@@ -54,10 +54,14 @@ export function Navigation() {
       >
         <Link
           to="/"
-          className={`${linkClass} tracking-[0.3em] text-left`}
-          style={{ fontSize: 'clamp(0.75rem, 2.5vw, 0.875rem)', fontWeight: 400 }}
+          className="min-h-[44px] min-w-[44px] inline-flex items-center transition-opacity duration-300 hover:opacity-75 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
+          aria-label="Constance — home"
         >
-          Constance
+          <img
+            src="/constance-stacked-black.svg"
+            alt="Constance"
+            style={{ height: '36px', width: 'auto' }}
+          />
         </Link>
 
         {/* Hamburger: opens Menu + Career on all screen sizes */}
