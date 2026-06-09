@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { publicAssetBase } from '../utils/publicAssetBase';
 
 interface LoadingScreenProps {
   progress: number;
@@ -26,7 +27,7 @@ export function LoadingScreen({ progress, isReady }: LoadingScreenProps) {
               transition={{ duration: 0.8 }}
             >
               <img
-                src="/constance-stacked-black.svg"
+                src={`${publicAssetBase()}constance-stacked-black.svg`}
                 alt="Constance"
                 style={{ height: 'clamp(64px, 12vw, 96px)', width: 'auto' }}
               />

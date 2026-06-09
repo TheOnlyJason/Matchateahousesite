@@ -12,7 +12,7 @@ import { Chapter6 } from '../components/Chapter6';
 import { HomeSectionNav, type HomeNavSection } from '../components/HomeSectionNav';
 import { publicAssetBase } from '../utils/publicAssetBase';
 
-const FRAME_COUNT = 192;
+const FRAME_COUNT = 240;
 
 const HOME_NAV_SECTIONS: readonly HomeNavSection[] = [
   { id: 'home-hero', label: 'Home' },
@@ -74,7 +74,7 @@ export function HomePage() {
   const frameUrls = useMemo(() => {
     const base = publicAssetBase();
     return Array.from({ length: FRAME_COUNT }, (_, i) =>
-      `${base}frames/${(i + 1).toString().padStart(4, '0')}.jpg`
+      `${base}frames2/${(i + 1).toString().padStart(4, '0')}.jpg`
     );
   }, []);
 

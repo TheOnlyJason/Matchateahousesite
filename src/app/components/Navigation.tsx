@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router';
+import { publicAssetBase } from '../utils/publicAssetBase';
 
 const HAMBURGER_LINKS = [
   { to: '/menu', label: 'Menu' },
@@ -58,7 +59,7 @@ export function Navigation() {
           aria-label="Constance — home"
         >
           <img
-            src="/constance-stacked-black.svg"
+            src={`${publicAssetBase()}constance-stacked-black.svg`}
             alt="Constance"
             style={{ height: '36px', width: 'auto' }}
           />

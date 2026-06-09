@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { publicAssetBase } from '../utils/publicAssetBase';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -77,7 +78,7 @@ export function FrameScrub({ images }: FrameScrubProps) {
       {/* Small logo mark — top-left corner */}
       <div className="absolute top-0 left-0 pointer-events-none px-4 pt-4 sm:px-6 sm:pt-5 md:px-8 md:pt-6 flex items-start" style={{ paddingTop: 'clamp(1rem, 3vw, 1.5rem)' }}>
         <img
-          src="/constance-mark-white.svg"
+          src={`${publicAssetBase()}constance-mark-white.svg`}
           alt=""
           aria-hidden="true"
           style={{ height: 'clamp(28px, 4vw, 40px)', width: 'auto', opacity: 0.85 }}
@@ -88,7 +89,7 @@ export function FrameScrub({ images }: FrameScrubProps) {
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none px-4 sm:px-8">
         <div className="max-w-4xl text-center space-y-4 sm:space-y-5 md:space-y-6">
           <img
-            src="/constance-wordmark-white.svg"
+            src={`${publicAssetBase()}constance-wordmark-white.svg`}
             alt="Constance"
             className="mx-auto"
             style={{ height: 'clamp(4rem, 14vw, 9rem)', width: 'auto', opacity: 0.92 }}
