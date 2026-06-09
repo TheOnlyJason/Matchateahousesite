@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router';
-import { publicAssetBase } from '../utils/publicAssetBase';
+import { ConstanceWordmark } from './ConstanceWordmark';
 
 const HAMBURGER_LINKS = [
   { to: '/menu', label: 'Menu' },
@@ -58,11 +58,7 @@ export function Navigation() {
           className="min-h-[44px] min-w-[44px] inline-flex items-center transition-opacity duration-300 hover:opacity-75 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
           aria-label="Constance — home"
         >
-          <img
-            src={`${publicAssetBase()}constance-stacked-black.svg`}
-            alt="Constance"
-            style={{ height: '36px', width: 'auto' }}
-          />
+          <ConstanceWordmark size="nav" color="black" stacked />
         </Link>
 
         {/* Hamburger: opens Menu + Career on all screen sizes */}

@@ -19,6 +19,60 @@ interface Particle {
   vy: number;
   size: number;
   opacity: number;
+  rotation: number;
+  spin: number;
+  shade: number;
+}
+
+const LEAF_PALETTE = [
+  { r: 122, g: 148, b: 88 },
+  { r: 98, g: 128, b: 72 },
+  { r: 76, g: 108, b: 58 },
+  { r: 142, g: 162, b: 102 },
+] as const;
+
+function drawTeaLeaf(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  size: number,
+  rotation: number,
+  opacity: number,
+  shade: number
+) {
+  const palette = LEAF_PALETTE[Math.floor(shade * LEAF_PALETTE.length) % LEAF_PALETTE.length];
+  const w = size * 2.4;
+  const h = size * 3.8;
+
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(rotation);
+  ctx.globalAlpha = opacity;
+
+  ctx.beginPath();
+  ctx.moveTo(0, -h * 0.46);
+  ctx.bezierCurveTo(w * 0.62, -h * 0.34, w * 0.56, h * 0.34, 0, h * 0.5);
+  ctx.bezierCurveTo(-w * 0.56, h * 0.34, -w * 0.62, -h * 0.34, 0, -h * 0.46);
+  ctx.closePath();
+  ctx.fillStyle = `rgb(${palette.r}, ${palette.g}, ${palette.b})`;
+  ctx.fill();
+
+  ctx.strokeStyle = `rgba(${Math.max(palette.r - 28, 0)}, ${Math.max(palette.g - 32, 0)}, ${Math.max(palette.b - 22, 0)}, ${opacity * 0.55})`;
+  ctx.lineWidth = Math.max(0.45, size * 0.14);
+  ctx.beginPath();
+  ctx.moveTo(0, -h * 0.32);
+  ctx.lineTo(0, h * 0.36);
+  ctx.stroke();
+
+  ctx.lineWidth = Math.max(0.3, size * 0.1);
+  ctx.beginPath();
+  ctx.moveTo(0, -h * 0.05);
+  ctx.quadraticCurveTo(w * 0.28, h * 0.08, w * 0.34, h * 0.22);
+  ctx.moveTo(0, h * 0.02);
+  ctx.quadraticCurveTo(-w * 0.26, h * 0.14, -w * 0.32, h * 0.26);
+  ctx.stroke();
+
+  ctx.restore();
 }
 
 export function Chapter3({ data }: Chapter3Props) {
@@ -49,14 +103,17 @@ export function Chapter3({ data }: Chapter3Props) {
     // Initialize particles
     const initParticles = () => {
       particlesRef.current = [];
-      for (let i = 0; i < 150; i++) {
+      for (let i = 0; i < 120; i++) {
         particlesRef.current.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height - canvas.height,
-          vx: (Math.random() - 0.5) * 0.5,
-          vy: Math.random() * 2 + 1,
-          size: Math.random() * 4 + 2,
-          opacity: Math.random() * 0.8 + 0.2,
+          vx: (Math.random() - 0.5) * 0.45,
+          vy: Math.random() * 1.6 + 0.8,
+          size: Math.random() * 3.5 + 2.5,
+          opacity: Math.random() * 0.55 + 0.25,
+          rotation: Math.random() * Math.PI * 2,
+          spin: (Math.random() - 0.5) * 0.018,
+          shade: Math.random(),
         });
       }
     };
@@ -68,25 +125,30 @@ export function Chapter3({ data }: Chapter3Props) {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       // Draw particles
-      particlesRef.current.forEach(particle => {
+      particlesRef.current.forEach((particle) => {
         const speed = 1 + Math.abs(scrollVelocityRef.current) * 5;
         particle.y += particle.vy * speed;
         particle.x += particle.vx;
+        particle.rotation += particle.spin * speed;
 
-        // Reset particle if it goes off screen
-        if (particle.y > canvas.height) {
-          particle.y = -20;
+        if (particle.y > canvas.height + 30) {
+          particle.y = -30;
+          particle.x = Math.random() * canvas.width;
+          particle.rotation = Math.random() * Math.PI * 2;
+        }
+        if (particle.x < -30 || particle.x > canvas.width + 30) {
           particle.x = Math.random() * canvas.width;
         }
-        if (particle.x < 0 || particle.x > canvas.width) {
-          particle.x = Math.random() * canvas.width;
-        }
 
-        // Draw particle (matcha green)
-        ctx.fillStyle = `rgba(124, 179, 66, ${particle.opacity})`;
-        ctx.beginPath();
-        ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-        ctx.fill();
+        drawTeaLeaf(
+          ctx,
+          particle.x,
+          particle.y,
+          particle.size,
+          particle.rotation,
+          particle.opacity,
+          particle.shade
+        );
       });
 
       animationFrame = requestAnimationFrame(animate);

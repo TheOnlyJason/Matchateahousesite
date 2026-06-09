@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { publicAssetBase } from '../utils/publicAssetBase';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -16,14 +17,14 @@ interface Chapter2Props {
 export function Chapter2({ data }: Chapter2Props) {
   const sectionRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
-  const videoRef = useRef<HTMLDivElement>(null);
+  const bgRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const section = sectionRef.current;
     const text = textRef.current;
-    const video = videoRef.current;
+    const bg = bgRef.current;
 
-    if (!section || !text || !video) return;
+    if (!section || !text || !bg) return;
 
     const tl = gsap.timeline({
       scrollTrigger: {
@@ -37,7 +38,7 @@ export function Chapter2({ data }: Chapter2Props) {
     });
 
     // Portal scale effect
-    tl.from(video, {
+    tl.from(bg, {
       scale: 0.3,
       opacity: 0,
       duration: 0.5,
@@ -64,7 +65,8 @@ export function Chapter2({ data }: Chapter2Props) {
     }, 0.5);
 
     return () => {
-      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+      tl.scrollTrigger?.kill();
+      tl.kill();
     };
   }, []);
 
@@ -76,29 +78,24 @@ export function Chapter2({ data }: Chapter2Props) {
       className="relative h-screen w-full overflow-hidden"
       style={{ backgroundColor: 'var(--stone-grey)' }}
     >
-      {/* Video Background with Portal Effect */}
+      {/* Tea field background */}
       <div
-        ref={videoRef}
+        ref={bgRef}
         className="absolute inset-0"
-        style={{ 
+        style={{
           transform: 'translateZ(0)',
-          willChange: 'transform'
+          willChange: 'transform',
         }}
       >
-        <video
-          className="w-full h-full object-cover"
-          autoPlay
-          loop
-          muted
-          playsInline
-          style={{ 
-            transform: 'translateZ(0)',
-            willChange: 'transform'
-          }}
-        >
-          <source src={data.videoUrl || 'https://assets.codepen.io/127738/overview_of_tea_field.mp4'} type="video/mp4" />
-        </video>
-        <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-black/50" />
+        <img
+          src={`${publicAssetBase()}source-bg-hq.jpg`}
+          alt=""
+          aria-hidden="true"
+          className="h-full w-full object-cover pointer-events-none select-none"
+          decoding="async"
+          draggable={false}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/25 to-black/55" />
       </div>
 
       {/* Parallax Text */}

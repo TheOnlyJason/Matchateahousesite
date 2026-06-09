@@ -1,12 +1,13 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import Lenis from 'lenis';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion } from 'motion/react';
 import { useImagePreloader } from '../hooks/useImagePreloader';
 import { LoadingScreen } from '../components/LoadingScreen';
 import { FrameScrub } from '../components/FrameScrub';
 import { Chapter2 } from '../components/Chapter2';
 import { Chapter3 } from '../components/Chapter3';
 import { Chapter4 } from '../components/Chapter4';
+import { Chapter4Extract2 } from '../components/Chapter4Extract2';
 import { Chapter5 } from '../components/Chapter5';
 import { Chapter6 } from '../components/Chapter6';
 import { HomeSectionNav, type HomeNavSection } from '../components/HomeSectionNav';
@@ -19,6 +20,7 @@ const HOME_NAV_SECTIONS: readonly HomeNavSection[] = [
   { id: 'home-freshness', label: 'Freshness' },
   { id: 'home-source', label: 'Source' },
   { id: 'home-extraction', label: 'Extract' },
+  { id: 'home-extract-2', label: 'Extract II' },
   { id: 'home-who', label: 'Obsession' },
   { id: 'home-studio', label: 'Studio' },
 ];
@@ -71,6 +73,7 @@ const contentData = {
 
 export function HomePage() {
   const [lenis, setLenis] = useState<Lenis | null>(null);
+  const [loaderDone, setLoaderDone] = useState(false);
   const frameUrls = useMemo(() => {
     const base = publicAssetBase();
     return Array.from({ length: FRAME_COUNT }, (_, i) =>
@@ -79,9 +82,10 @@ export function HomePage() {
   }, []);
 
   const { progress, isReady, images } = useImagePreloader(frameUrls);
+  const handleLoaderComplete = useCallback(() => setLoaderDone(true), []);
 
   useEffect(() => {
-    if (!isReady) return;
+    if (!isReady || !loaderDone) return;
     const instance = new Lenis({
       lerp: 0.065,
       smoothWheel: true,
@@ -97,14 +101,17 @@ export function HomePage() {
       setLenis(null);
       instance.destroy();
     };
-  }, [isReady]);
+  }, [isReady, loaderDone]);
 
   return (
     <>
-      <LoadingScreen progress={progress} isReady={isReady} />
-      <AnimatePresence>
-        {isReady && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1 }}>
+      <LoadingScreen progress={progress} isReady={isReady} onComplete={handleLoaderComplete} />
+      {isReady && loaderDone && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+        >
             <HomeSectionNav lenis={lenis} sections={HOME_NAV_SECTIONS} />
             <section id="home-hero" className="relative" aria-label="Home">
               <FrameScrub images={images} />
@@ -119,6 +126,9 @@ export function HomePage() {
               <section id="home-extraction" className="relative" aria-label="Extraction">
                 <Chapter4 data={contentData.chapter4} />
               </section>
+              <section id="home-extract-2" className="relative" aria-label="Extract 2">
+                <Chapter4Extract2 data={contentData.chapter4} />
+              </section>
               <section id="home-who" className="relative" aria-label="Who we are">
                 <Chapter5 data={contentData.chapter5} />
               </section>
@@ -127,8 +137,7 @@ export function HomePage() {
               </section>
             </div>
           </motion.div>
-        )}
-      </AnimatePresence>
+      )}
     </>
   );
 }

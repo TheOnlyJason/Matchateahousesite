@@ -108,6 +108,13 @@ canvas {
   color: var(--luxury-charcoal);
 }
 
+.constance-wordmark {
+  font-family: var(--font-heading);
+  font-weight: 500;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
 /* Subtle film grain (editorial consistency) */
 .film-grain {
   pointer-events: none;
@@ -124,4 +131,41 @@ canvas {
 /* Breathing room between story sections */
 .chapter-spacer {
   min-height: clamp(18vh, 28vw, 36vh);
+}
+
+/* Loading screen — CSS-only ring rotation (compositor thread, no React rAF) */
+@keyframes loader-ring-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes loader-ring-enter {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.loader-ring {
+  will-change: transform;
+  animation: loader-ring-spin var(--loader-duration, 50s) linear infinite,
+    loader-ring-enter 0.85s ease both;
+  animation-delay: var(--loader-enter-delay, 0s), var(--loader-enter-delay, 0s);
+}
+
+.loader-ring--reverse {
+  animation-direction: reverse, normal;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loader-ring {
+    animation: loader-ring-enter 0.85s ease both;
+    will-change: auto;
+  }
 }
