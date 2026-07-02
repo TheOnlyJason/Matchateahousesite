@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
+import { getLogoBasePath, getLogoPoint, type LogoPathPoint } from '../utils/loaderLogoPath';
 
 interface LoadingScreenProps {
   progress: number;
@@ -9,42 +10,24 @@ interface LoadingScreenProps {
 
 const LOADER_SAGE = '#b8c0b4';
 const FULL_CIRCLE = Math.PI * 2;
-const START_ANGLE = -Math.PI / 2;
-const OUTER_RADIUS = 200;
 const SCATTER_MIN = 95;
 const SCATTER_RANGE = 215;
-/** Brief beat after rings form before exit — keeps intro intact without long spin */
-const MIN_DRIFT_MS = 800;
-
-type RingDef = {
-  id: string;
-  text: string;
-  radius: number;
-  fontSize: number;
-  maxOpacity: number;
-  driftSpeed: number;
-  fontWeight: number;
-};
-
-const RINGS: RingDef[] = [
-  { id: 'inner', text: 'CONSTANCE · STUDIO', radius: 76, fontSize: 15, maxOpacity: 1, driftSpeed: 0.00015, fontWeight: 500 },
-  { id: 'matcha', text: 'MATCHA · TENCHA · UJI', radius: 116, fontSize: 14, maxOpacity: 0.82, driftSpeed: -0.00012, fontWeight: 400 },
-  { id: 'mill', text: 'MILLED · DAILY · CRAFT', radius: 158, fontSize: 13, maxOpacity: 0.58, driftSpeed: 0.0001, fontWeight: 400 },
-  { id: 'outer', text: 'SAN FRANCISCO · TAIWAN · TEA', radius: OUTER_RADIUS, fontSize: 12, maxOpacity: 0.34, driftSpeed: -0.00008, fontWeight: 400 },
-];
+/** Brief static hold after logo forms before exit */
+const MIN_HOLD_MS = 600;
+const LOGO_TEXT =
+  'CONSTANCE · STUDIO · MATCHA · TENCHA · UJI · MILLED · DAILY · CRAFT · SAN FRANCISCO · TAIWAN · TEA';
+const LETTER_FONT_SIZE = 14;
+const LETTER_FONT_WEIGHT = 400;
+const PATH_START = 0.03;
+const PATH_SPAN = 0.94;
 
 type LetterMeta = {
   id: string;
   char: string;
-  ringIndex: number;
-  orgAngle: number;
-  orgRadius: number;
+  orgPathProgress: number;
   scatterAngle: number;
   scatterRadius: number;
   scatterRotate: number;
-  fontSize: number;
-  fontWeight: number;
-  maxOpacity: number;
 };
 
 function pseudoRandom(seed: number): number {
@@ -53,37 +36,22 @@ function pseudoRandom(seed: number): number {
 }
 
 function buildLetters(): LetterMeta[] {
-  const letters: LetterMeta[] = [];
-  let globalIdx = 0;
-
-  RINGS.forEach((ring, ringIndex) => {
-    const chars = [...ring.text.replace(/ /g, '\u00A0')];
-    chars.forEach((char, charIdx) => {
-      const orgAngle = START_ANGLE + (charIdx / chars.length) * FULL_CIRCLE;
-      const r1 = pseudoRandom(globalIdx * 3 + ringIndex);
-      const r2 = pseudoRandom(globalIdx * 7 + 1);
-      const r3 = pseudoRandom(globalIdx * 11 + 2);
-      letters.push({
-        id: `${ringIndex}-${charIdx}`,
-        char,
-        ringIndex,
-        orgAngle,
-        orgRadius: ring.radius,
-        scatterAngle: r1 * FULL_CIRCLE,
-        scatterRadius: SCATTER_MIN + Math.sqrt(r2) * SCATTER_RANGE,
-        scatterRotate: r3 * 360 - 180,
-        fontSize: ring.fontSize,
-        fontWeight: ring.fontWeight,
-        maxOpacity: ring.maxOpacity * (0.55 + 0.45 * (ring.radius / OUTER_RADIUS)),
-      });
-      globalIdx += 1;
-    });
+  const chars = [...LOGO_TEXT.replace(/ /g, '\u00A0')];
+  return chars.map((char, charIdx) => {
+    const orgPathProgress = PATH_START + (charIdx / chars.length) * PATH_SPAN;
+    const r1 = pseudoRandom(charIdx * 3);
+    const r2 = pseudoRandom(charIdx * 7 + 1);
+    const r3 = pseudoRandom(charIdx * 11 + 2);
+    return {
+      id: `${charIdx}`,
+      char,
+      orgPathProgress,
+      scatterAngle: r1 * FULL_CIRCLE,
+      scatterRadius: SCATTER_MIN + Math.sqrt(r2) * SCATTER_RANGE,
+      scatterRotate: r3 * 360 - 180,
+    };
   });
-
-  return letters;
 }
-
-const ALL_LETTERS = buildLetters();
 
 function polarToTransform(angle: number, radius: number, rotateOffset = 0) {
   const x = Math.cos(angle) * radius;
@@ -92,14 +60,22 @@ function polarToTransform(angle: number, radius: number, rotateOffset = 0) {
   return { x, y, rotate };
 }
 
+function getLetterTransform(
+  meta: LetterMeta,
+  base: LogoPathPoint[]
+): { x: number; y: number; rotate: number } {
+  const point = getLogoPoint(base, meta.orgPathProgress);
+  return { x: point.x, y: point.y, rotate: point.rotate };
+}
+
 export function LoadingScreen({ progress, isReady, onComplete }: LoadingScreenProps) {
   const [visible, setVisible] = useState(true);
+  const [letters, setLetters] = useState<LetterMeta[]>([]);
   const counterRef = useRef<HTMLSpanElement>(null);
   const counterWrapRef = useRef<HTMLSpanElement>(null);
   const rootRef = useRef<HTMLDivElement>(null);
   const letterRefs = useRef<Map<string, HTMLSpanElement>>(new Map());
-  const driftRotation = useRef<number[]>(RINGS.map(() => 0));
-  const driftTicker = useRef<(() => void) | null>(null);
+  const logoBaseRef = useRef<LogoPathPoint[]>([]);
   const exitStarted = useRef(false);
   const organizeDone = useRef(false);
   const organizeAt = useRef<number | null>(null);
@@ -112,6 +88,11 @@ export function LoadingScreen({ progress, isReady, onComplete }: LoadingScreenPr
   progressRef.current = progress;
   isReadyRef.current = isReady;
   onCompleteRef.current = onComplete;
+
+  useEffect(() => {
+    logoBaseRef.current = getLogoBasePath();
+    setLetters(buildLetters());
+  }, []);
 
   useEffect(() => {
     const tick = () => {
@@ -139,38 +120,16 @@ export function LoadingScreen({ progress, isReady, onComplete }: LoadingScreenPr
   }, []);
 
   useEffect(() => {
+    if (letters.length === 0 || logoBaseRef.current.length === 0) return;
+
+    const base = logoBaseRef.current;
+
     const getLetterEls = () =>
-      ALL_LETTERS.map((l) => letterRefs.current.get(l.id)).filter(Boolean) as HTMLSpanElement[];
-
-    const stopDrift = () => {
-      if (driftTicker.current) {
-        gsap.ticker.remove(driftTicker.current);
-        driftTicker.current = null;
-      }
-    };
-
-    const startDrift = () => {
-      if (driftTicker.current) return;
-
-      const tick = () => {
-        ALL_LETTERS.forEach((meta) => {
-          const el = letterRefs.current.get(meta.id);
-          if (!el) return;
-          driftRotation.current[meta.ringIndex] += RINGS[meta.ringIndex].driftSpeed * 16;
-          const angle = meta.orgAngle + driftRotation.current[meta.ringIndex];
-          const { x, y, rotate } = polarToTransform(angle, meta.orgRadius);
-          gsap.set(el, { x, y, rotate, force3D: true });
-        });
-      };
-
-      driftTicker.current = tick;
-      gsap.ticker.add(tick);
-    };
+      letters.map((l) => letterRefs.current.get(l.id)).filter(Boolean) as HTMLSpanElement[];
 
     const runExit = () => {
       if (exitStarted.current) return;
       exitStarted.current = true;
-      stopDrift();
 
       const letterEls = getLetterEls();
       const exitTl = gsap.timeline({
@@ -188,16 +147,8 @@ export function LoadingScreen({ progress, isReady, onComplete }: LoadingScreenPr
           duration: 0.5,
           ease: 'power2.inOut',
           opacity: 0,
-          x: (i) => {
-            const m = ALL_LETTERS[i];
-            const a = m.orgAngle + driftRotation.current[m.ringIndex];
-            return Math.cos(a) * (m.orgRadius * 1.35);
-          },
-          y: (i) => {
-            const m = ALL_LETTERS[i];
-            const a = m.orgAngle + driftRotation.current[m.ringIndex];
-            return Math.sin(a) * (m.orgRadius * 1.35);
-          },
+          x: (i) => getLetterTransform(letters[i], base).x * 1.35,
+          y: (i) => getLetterTransform(letters[i], base).y * 1.35,
         },
         0
       );
@@ -213,7 +164,7 @@ export function LoadingScreen({ progress, isReady, onComplete }: LoadingScreenPr
       const letterEls = getLetterEls();
       if (letterEls.length === 0) return;
 
-      ALL_LETTERS.forEach((meta) => {
+      letters.forEach((meta) => {
         const el = letterRefs.current.get(meta.id);
         if (!el) return;
         const { x, y, rotate } = polarToTransform(meta.scatterAngle, meta.scatterRadius, meta.scatterRotate);
@@ -229,7 +180,7 @@ export function LoadingScreen({ progress, isReady, onComplete }: LoadingScreenPr
       introTl.to(
         letterEls,
         {
-          opacity: (i) => ALL_LETTERS[i]?.maxOpacity ?? 0.5,
+          opacity: 0.9,
           duration: 2.2,
           stagger: { amount: 1.4, from: 'random' },
           ease: 'power1.out',
@@ -243,9 +194,9 @@ export function LoadingScreen({ progress, isReady, onComplete }: LoadingScreenPr
           duration: 2.5,
           ease: 'power3.inOut',
           stagger: { amount: 0.9, from: 'random' },
-          x: (i) => polarToTransform(ALL_LETTERS[i].orgAngle, ALL_LETTERS[i].orgRadius).x,
-          y: (i) => polarToTransform(ALL_LETTERS[i].orgAngle, ALL_LETTERS[i].orgRadius).y,
-          rotate: (i) => polarToTransform(ALL_LETTERS[i].orgAngle, ALL_LETTERS[i].orgRadius).rotate,
+          x: (i) => getLetterTransform(letters[i], base).x,
+          y: (i) => getLetterTransform(letters[i], base).y,
+          rotate: (i) => getLetterTransform(letters[i], base).rotate,
         },
         3.0
       );
@@ -253,17 +204,16 @@ export function LoadingScreen({ progress, isReady, onComplete }: LoadingScreenPr
       introTl.add(() => {
         organizeDone.current = true;
         organizeAt.current = Date.now();
-        startDrift();
       }, 5.8);
     }, 50);
 
     const exitPoll = window.setInterval(() => {
-      const driftElapsed = organizeAt.current ? Date.now() - organizeAt.current : 0;
+      const holdElapsed = organizeAt.current ? Date.now() - organizeAt.current : 0;
       if (
         isReadyRef.current &&
         organizeDone.current &&
         displayedRef.current >= 100 &&
-        driftElapsed >= MIN_DRIFT_MS
+        holdElapsed >= MIN_HOLD_MS
       ) {
         window.clearInterval(exitPoll);
         runExit();
@@ -273,10 +223,9 @@ export function LoadingScreen({ progress, isReady, onComplete }: LoadingScreenPr
     return () => {
       window.clearTimeout(initTimer);
       window.clearInterval(exitPoll);
-      stopDrift();
       gsap.killTweensOf(getLetterEls());
     };
-  }, []);
+  }, [letters]);
 
   if (!visible) return null;
 
@@ -291,24 +240,23 @@ export function LoadingScreen({ progress, isReady, onComplete }: LoadingScreenPr
     >
       <div
         className="relative"
-        style={{ width: 'min(98vw, 640px)', height: 'min(98vw, 640px)' }}
+        style={{ width: 'min(96vw, 760px)', height: 'min(96vw, 760px)' }}
       >
         <div className="absolute left-1/2 top-1/2" style={{ width: 0, height: 0 }}>
-          {ALL_LETTERS.map((meta) => (
+          {letters.map((meta) => (
             <span
               key={meta.id}
               ref={(el) => {
                 if (el) letterRefs.current.set(meta.id, el);
                 else letterRefs.current.delete(meta.id);
               }}
-              data-ring={meta.ringIndex}
               className="absolute left-0 top-0 whitespace-pre will-change-transform"
               style={{
                 fontFamily: 'var(--font-heading)',
-                fontSize: `${meta.fontSize}px`,
-                fontWeight: meta.fontWeight,
+                fontSize: `${LETTER_FONT_SIZE}px`,
+                fontWeight: LETTER_FONT_WEIGHT,
                 color: '#10120f',
-                letterSpacing: '0.2em',
+                letterSpacing: '0.12em',
               }}
             >
               {meta.char}
@@ -321,11 +269,11 @@ export function LoadingScreen({ progress, isReady, onComplete }: LoadingScreenPr
             ref={counterWrapRef}
             className="tabular-nums leading-none"
             style={{
-              fontFamily: 'var(--font-body)',
-              fontSize: 'clamp(2.25rem, 7.5vw, 3.5rem)',
-              fontWeight: 400,
+              fontFamily: 'var(--font-heading)',
+              fontSize: `${LETTER_FONT_SIZE}px`,
+              fontWeight: LETTER_FONT_WEIGHT,
               color: '#10120f',
-              letterSpacing: '-0.02em',
+              letterSpacing: '0.2em',
             }}
           >
             <span ref={counterRef}>0</span>

@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from
 import type Lenis from 'lenis';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { TeaLeafIcon } from './TeaLeafIcon';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -18,45 +19,6 @@ function getPageTop(el: HTMLElement): number {
     node = node.offsetParent as HTMLElement | null;
   }
   return y;
-}
-
-/** Outline leaf for inactive slots */
-function TeaLeafSlot({ active }: { active: boolean }) {
-  return (
-    <svg
-      className={active ? 'opacity-0' : 'opacity-[0.38]'}
-      viewBox="0 0 24 32"
-      width="15"
-      height="20"
-      aria-hidden
-    >
-      <path
-        d="M12 2.5v3M12 8.5c-4.2 0-7.5 3.4-7.5 7.6 0 3.9 2.6 7.1 6.2 7.8.5.1 1 .2 1.3.2.4 0 .8-.1 1.3-.2 3.6-.7 6.2-3.9 6.2-7.8 0-4.2-3.3-7.6-7.5-7.6Z"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.2"
-        strokeLinejoin="round"
-      />
-      <path d="M12 12v9" fill="none" stroke="currentColor" strokeWidth="0.85" strokeLinecap="round" opacity="0.85" />
-    </svg>
-  );
-}
-
-/** Filled leaf that animates vertically between slots */
-function TeaLeafActive() {
-  return (
-    <svg viewBox="0 0 24 32" width="18" height="24" aria-hidden className="drop-shadow-[0_2px_8px_rgba(0,0,0,0.35)]">
-      <path
-        d="M12 2.5v3M12 8.5c-4.2 0-7.5 3.4-7.5 7.6 0 3.9 2.6 7.1 6.2 7.8.5.1 1 .2 1.3.2.4 0 .8-.1 1.3-.2 3.6-.7 6.2-3.9 6.2-7.8 0-4.2-3.3-7.6-7.5-7.6Z"
-        fill="currentColor"
-        stroke="currentColor"
-        strokeWidth="0.5"
-        strokeLinejoin="round"
-        opacity="0.96"
-      />
-      <path d="M12 12v9" stroke="rgba(0,0,0,0.22)" strokeWidth="0.75" strokeLinecap="round" fill="none" />
-    </svg>
-  );
 }
 
 interface HomeSectionNavProps {
@@ -154,26 +116,26 @@ export function HomeSectionNav({ lenis, sections }: HomeSectionNavProps) {
 
   if (!lenis) return null;
 
-  const leafTilt = -4 + activeIndex * -9;
+  const leafTilt = -8 + activeIndex * -11;
   const leafTransition = motionOn
     ? 'transform 0.82s cubic-bezier(0.28, 0.85, 0.22, 1)'
     : 'none';
 
   return (
     <nav
-      className="pointer-events-auto fixed left-5 top-1/2 z-[45] hidden -translate-y-1/2 mix-blend-difference md:block"
+      className="pointer-events-auto fixed left-5 top-1/2 z-[45] hidden -translate-y-1/2 md:block"
       aria-label="Sections"
     >
-      <div ref={trackRef} className="relative text-white">
+      <div ref={trackRef} className="relative">
         <div className="pointer-events-none absolute inset-0 z-10 overflow-visible" aria-hidden>
           <div
-            className="absolute left-0 top-0 flex w-10 justify-center will-change-transform"
+            className="absolute left-0 top-0 flex w-10 justify-center will-change-transform drop-shadow-[0_2px_6px_rgba(58,82,42,0.28)]"
             style={{
               transform: `translate(0px, ${leafY}px) translateY(-50%) rotate(${leafTilt}deg)`,
               transition: leafTransition,
             }}
           >
-            <TeaLeafActive />
+            <TeaLeafIcon variant="filled" width={18} height={24} />
           </div>
         </div>
 
@@ -190,17 +152,22 @@ export function HomeSectionNav({ lenis, sections }: HomeSectionNavProps) {
               >
                 <button
                   type="button"
-                  className="flex h-10 w-10 shrink-0 items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
+                  className="flex h-10 w-10 shrink-0 items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--luxury-moss)] focus-visible:ring-offset-2"
                   aria-label={`Go to ${section.label}`}
                   aria-current={isActive ? 'true' : undefined}
                   onClick={() => goTo(section.id)}
                 >
-                  <TeaLeafSlot active={isActive} />
+                  <TeaLeafIcon
+                    variant="outline"
+                    width={15}
+                    height={20}
+                    className={isActive ? 'opacity-0' : 'opacity-100'}
+                  />
                 </button>
                 {isActive ? (
                   <span
-                    className="whitespace-nowrap text-[0.6875rem] font-normal uppercase tracking-[0.28em] text-white"
-                    style={{ textShadow: '0 1px 12px rgba(0,0,0,0.45)' }}
+                    className="whitespace-nowrap text-[0.6875rem] font-normal uppercase tracking-[0.28em]"
+                    style={{ color: 'var(--luxury-moss)' }}
                     aria-hidden
                   >
                     {section.label}
